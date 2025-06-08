@@ -8,18 +8,8 @@
       "node": ">=16.x"
    },
    "scripts": {
-      "prebuild": "rm -rf dist",
-      "test": "jest --verbose --runInBand",
-      "build": "webpack",
-      "start": "fastify start server/plugin.js -l debug -P -o"
-   },
-   "jest": {
-      "modulePathIgnorePatterns": [
-         "<rootDir>/__tests__/helpers/"
-      ],
-      "setupFiles": [
-         "dotenv/config"
-      ]
+      "test": "vitest run",
+      "start": "fastify start server/index.js -l debug -P"
    },
    "author": "botirk",
    "license": "ISC",
@@ -31,11 +21,17 @@
       "@fastify/static": "^8.2.0",
       "@fastify/view": "^11.1.0",
       "fastify": "^5.3.3",
-      "fastify-method-override": "^1.5.10",
+      "fastify-cli": "^7.4.0",
       "fastify-reverse-routes": "^3.0.0",
       "i18next": "^25.2.1",
       "knex": "^3.1.0",
       "lodash": "^4.17.21",
-      "objection": "^3.1.5"
+      "objection": "^3.1.5",
+      "pug": "^3.0.3",
+      "qs": "^6.14.0"
+   },
+   "devDependencies": {
+      "dotenv": "^16.5.0",
+      "vitest": "^3.2.2"
    }
 }
