@@ -1,0 +1,18 @@
+doctype html
+head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    link(rel="stylesheet", href="/assets/bootstrap.min.css")
+    title @Hexlet/code
+body 
+    header.p-3.text-bg-dark 
+        .container 
+            .d-flex.justify-content-between
+                ul.nav
+                    li
+                        a.nav-link= t('layout.users')
+                .d-flex.align-items-center
+                    button.btn.btn-outline-light.me-2= t('layout.login')
+                    button.btn.btn-primary= t('layout.signUp')
+    .container.p-3
+        block content

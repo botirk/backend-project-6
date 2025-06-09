@@ -11,6 +11,8 @@ import { plugin as fastifyReverseRoutes } from 'fastify-reverse-routes';
 import qs from 'qs';
 import Pug from 'pug';
 import addRoutes from './routes/index.js';
+import i18next from 'i18next';
+import en from './locales/en.js';
 
 const __dirname = fileURLToPath(path.dirname(import.meta.url));
 
@@ -21,9 +23,8 @@ const setUpViews = (app) => {
     engine: {
       pug: Pug,
     },
-    includeViewExtension: true,
     defaultContext: {
-      assetPath: (filename) => `/assets/${filename}`,
+      t: (key) => i18next.t(key),
     },
     templates: path.join(__dirname, '..', 'server', 'views'),
   });
@@ -43,11 +44,27 @@ const registerPlugins = async (app) => {
       path: '/',
     },
   });
+  await app.register(fastifyStatic, {
+    root: path.join(__dirname, '..', 'assets'),
+    prefix: '/assets/'
+  });
+};
+
+const setupLocalization = async () => {
+  await i18next
+    .init({
+      lng: 'en',
+      fallbackLng: 'ru',
+      resources: {
+        en,
+      },
+    });
 };
 
 export default async (app, _options) => {
   await registerPlugins(app);
 
+  await setupLocalization();
   setUpViews(app);
   addRoutes(app);
 
