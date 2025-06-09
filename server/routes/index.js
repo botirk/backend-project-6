@@ -1,10 +1,10 @@
 import usersRoute from './users.js'
 
-export const users = () => '/users/'
+const users = () => '/users/'
 
-export const signUp = () => users() + 'new/'
+const signUp = () => users() + 'new/'
 
-export const main = () => '/'
+const main = () => '/'
 
 export const paths = {
     users,
