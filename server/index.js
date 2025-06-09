@@ -10,13 +10,11 @@ import fastifySensible from '@fastify/sensible';
 import { plugin as fastifyReverseRoutes } from 'fastify-reverse-routes';
 import qs from 'qs';
 import Pug from 'pug';
-import addRoutes from './routes/index.js';
+import addRoutes, { paths } from './routes/index.js';
 import i18next from 'i18next';
 import en from './locales/en.js';
 
 const __dirname = fileURLToPath(path.dirname(import.meta.url));
-
-const mode = process.env.NODE_ENV || 'development';
 
 const setUpViews = (app) => {
   app.register(fastifyView, {
@@ -24,6 +22,7 @@ const setUpViews = (app) => {
       pug: Pug,
     },
     defaultContext: {
+      ...paths,
       t: (key) => i18next.t(key),
     },
     templates: path.join(__dirname, '..', 'server', 'views'),

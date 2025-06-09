@@ -12,7 +12,7 @@ body
                     li
                         a.nav-link= t('layout.users')
                 .d-flex.align-items-center
-                    button.btn.btn-outline-light.me-2= t('layout.login')
-                    button.btn.btn-primary= t('layout.signUp')
+                    a.btn.btn-outline-light.me-2= t('layout.login')
+                    a.btn.btn-primary(href=signUp())= t('layout.signUp')
     .container.p-3
         block content
