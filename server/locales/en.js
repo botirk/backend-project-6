@@ -7,6 +7,12 @@ export default {
         },
         signUp: {
             signUp: 'Sign-up',
+            firstName: 'First name',
+            lastName: 'Last name',
+            email: 'Email',
+            password: 'Password',
+            submit: 'Submit',
+            success: 'Sign-up was successful',
         }
     }
 }

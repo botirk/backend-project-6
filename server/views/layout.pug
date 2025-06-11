@@ -10,9 +10,13 @@ body
             .d-flex.justify-content-between
                 ul.nav
                     li
-                        a.nav-link= t('layout.users')
+                        a.nav-link(href= paths.users())= t('layout.users')
                 .d-flex.align-items-center
                     a.btn.btn-outline-light.me-2= t('layout.login')
-                    a.btn.btn-primary(href=signUp())= t('layout.signUp')
+                    a.btn.btn-primary(href= paths.signUp())= t('layout.signUp')
     .container.p-3
+        each messages, type in flash
+            each message in messages
+                div.alert(class=`alert-${type}`)= message
+
         block content

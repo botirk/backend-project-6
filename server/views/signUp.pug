@@ -1,4 +1,21 @@
 extends layout.pug 
 
 block content 
-    form
+    form(action= paths.users(), method= 'post')
+        .mb-3
+            label.form-label(for= 'data-firstName')= t('signUp.firstName')
+            input.form-control(type= 'text', placeholder= t('signUp.firstName'), name= 'data[firstName]', id= 'data-firstName')
+        
+        .mb-3
+            label.form-label(for= 'data-lastName')= t('signUp.lastName')
+            input.form-control(type= 'text', placeholder= t('signUp.lastName'), name= 'data[lastName]')
+
+        .mb-3
+            label.form-label(for= 'data-email')= t('signUp.email')
+            input.form-control(type= 'text', placeholder= t('signUp.email'), name= 'data[email]')
+
+        .mb-3
+            label.form-label(for= 'data-password')= t('signUp.password')
+            input.form-control(type= 'password', placeholder= t('signUp.password'), name= 'data[password]')
+
+        button.btn.btn-primary(type= 'submit')= t('signUp.submit')

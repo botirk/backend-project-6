@@ -14,7 +14,7 @@ export const paths = {
 
 export default (app) => {
     app.get(main(), (_, res) => {
-        res.view('main.pug')
+        res.render('main.pug')
     })
 
     usersRoute(app)
