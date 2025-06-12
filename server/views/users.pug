@@ -3,23 +3,24 @@ extends layout.pug
 block content 
     h1= t('users.users')
 
-    table.table
-        thead 
-            tr
-                th= t('users.id')
-                th= t('users.fullName')
-                th= t('users.email')
-                th= t('users.createDate')
-                th= t('users.actions')
-        tbody
-            each user in users 
-                tr 
-                    td= user.id 
-                    td= user.firstName + ' ' + user.lastName 
-                    td= user.email
-                    td= user.createDate 
-                    td.d-flex.flex-wrap
-                        a.btn.btn-primary.me-1= t('users.edit')
-                        form(action= paths.users() + user.id, method= 'post')
-                            input(name= '_method', type= 'hidden', value= 'delete')
-                            button(type='submit').btn.btn-danger= t('users.delete')
+    .table-responsive
+        table.table
+            thead 
+                tr
+                    th= t('users.id')
+                    th= t('users.fullName')
+                    th= t('users.email')
+                    th= t('users.createDate')
+                    th= t('users.actions')
+            tbody
+                each user in users 
+                    tr 
+                        td= user.id 
+                        td= user.firstName + ' ' + user.lastName 
+                        td= user.email
+                        td= timestamp(user.createDate)
+                        td.d-flex.flex-wrap
+                            a.btn.btn-primary.me-1= t('users.edit')
+                            form(action= paths.users() + user.id, method= 'post')
+                                input(name= '_method', type= 'hidden', value= 'delete')
+                                button(type='submit').btn.btn-danger= t('users.delete')

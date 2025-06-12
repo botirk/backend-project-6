@@ -5,7 +5,7 @@
 export const up = function(knex) {
   return knex.schema.createTable('users', function(table) {
     table.increments('id')
-    table.string('email').notNullable()
+    table.string('email').notNullable().unique()
     table.string('password').notNullable()
     table.string('firstName').notNullable()
     table.string('lastName').notNullable()

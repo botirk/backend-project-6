@@ -11,8 +11,10 @@ body
             .d-flex.justify-content-between
                 ul.nav
                     li
+                        a.nav-link(href= paths.main())= t('layout.main')
+                    li
                         a.nav-link(href= paths.users())= t('layout.users')
-                .d-flex.align-items-center
+                .d-flex.align-items-center.flex-wrap.justify-content-end
                     a.btn.btn-outline-light.me-2= t('layout.login')
                     a.btn.btn-primary(href= paths.signUp())= t('layout.signUp')
     .container.p-3

@@ -44,13 +44,29 @@ test('post user & get user', async () => {
     expect(get.statusCode).toBe(200)
     const $ = cheerio.load(get.body)
 
-    expect($('td:contains("1")')).length(1)
+    expect($('td:contains("1")')).length.greaterThanOrEqual(1)
 
     expect($('td:contains("testFirstName testLastName")')).length(1)
 
     expect($('td:contains("ha@ha.ha")')).length(1)
+})
 
+test('post user & login', async () => {
+    const res = await app.inject({ 
+        method: 'POST', url: paths.users(), 
+        payload: { data: {firstName: 'testFirstName', lastName: 'testLastName', email: 'he@he.he', password: 'hehe' }}  
+    })
+    expect(res.statusCode).toBe(302)
 
+    const get = await app.inject({ method: 'GET', url: paths.login() })
+    expect(get.statusCode).toBe(200)
+    const $ = cheerio.load(get.body)
+
+    expect($('form')).length(1)
+
+    expect($('input[name="data[email]"]')).length(1)
+
+    expect($('input[name="data[password]"]')).length(1)
 })
 
 afterAll(async () => {

@@ -4,6 +4,7 @@ export default {
             signUp: 'Sign-up',
             login: 'Login',
             users: 'Users',
+            main: 'Main',
         },
         signUp: {
             signUp: 'Sign-up',

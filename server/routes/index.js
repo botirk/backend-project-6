@@ -4,12 +4,18 @@ const users = () => '/users/'
 
 const signUp = () => users() + 'new/'
 
+const session = () => '/session/'
+
+const login = () => session() + 'new/'
+
 const main = () => '/'
 
 export const paths = {
     users,
     signUp,
     main,
+    session,
+    login,
 }
 
 export default (app) => {

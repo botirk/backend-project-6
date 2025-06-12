@@ -13,6 +13,7 @@ import i18next from 'i18next'
 import Knex from 'knex'
 import models from './models/index.js'
 import en from './locales/en.js'
+import ru from './locales/ru.js'
 import addRoutes, { paths } from './routes/index.js'
 import * as knexConfig from '../knexfile.js'
 
@@ -27,6 +28,7 @@ const setUpViews = (app) => {
     defaultContext: {
       paths,
       t: (key) => i18next.t(key),
+      timestamp: (date) => new Date(date).toLocaleString()
     },
     templates: path.join(__dirname, '..', 'server', 'views'),
   });
@@ -61,10 +63,11 @@ const registerPlugins = async (app) => {
 const setupLocalization = async () => {
   await i18next
     .init({
-      lng: 'en',
-      fallbackLng: 'ru',
+      lng: 'ru',
+      fallbackLng: 'en',
       resources: {
         en,
+        ru
       },
     });
 };
