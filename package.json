@@ -9,7 +9,7 @@
    },
    "scripts": {
       "test": "vitest run",
-      "prestart": "cp node_modules/bootstrap/dist/css/bootstrap.min.css assets/bootstrap.min.css",
+      "prestart": "cp node_modules/bootstrap/dist/css/bootstrap.min.css assets/bootstrap.min.css && cp node_modules/bootstrap/dist/js/bootstrap.bundle.min.js assets/bootstrap.bundle.min.js",
       "start": "fastify start server/index.js -l debug -P -a 0.0.0.0"
    },
    "author": "botirk",

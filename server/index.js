@@ -32,12 +32,11 @@ const setUpViews = (app) => {
   });
 
   app.decorateReply('render', function render(viewPath, vars) {
-    this.view(viewPath, { ...vars, flash: this.flash() ?? [] });
+    return this.view(viewPath, { ...vars, flash: this.flash() ?? [] });
   });
 };
 
 const registerPlugins = async (app) => {
-  
   await app.register(fastifySensible)
   await app.register(fastifyReverseRoutes)
   await app.register(fastifyFormbody, { parser: qs.parse })

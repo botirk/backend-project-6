@@ -18,6 +18,7 @@ export default class User extends Model {
                 password: { type: 'string', minLength: 1 },
                 firstName: { type: 'string', minLength: 1 },
                 lastName: { type: 'string', minLength: 1 },
+                createDate: { type: 'string', format: 'date-time' }
             },
         }
     }

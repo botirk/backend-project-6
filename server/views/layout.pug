@@ -4,6 +4,7 @@ head
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
     link(rel="stylesheet", href="/assets/bootstrap.min.css")
     title @Hexlet/code
+    script(src="/assets/bootstrap.bundle.min.js")
 body 
     header.p-3.text-bg-dark 
         .container 
@@ -17,6 +18,8 @@ body
     .container.p-3
         each messages, type in flash
             each message in messages
-                div.alert(class=`alert-${type}`)= message
+                div.alert.alert-dissmissible.fade.show.d-flex.align-items-center.justify-content-between(class=`alert-${type}`, role='alert')
+                    = message
+                    button.btn-close(type= 'button', data-bs-dismiss='alert', aria-label='Close')
 
         block content
