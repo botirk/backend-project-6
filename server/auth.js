@@ -20,8 +20,8 @@ class FormStrategy extends Strategy {
     const email = req?.body?.data?.email
     const password = req?.body?.data?.password
     if (!email || !password) return this.fail()
-    const user = await this.app.models.user.query().findOne({ email })
-    if (user && this.compare(user.password, password)) return this.success(user)
+    const user = await this.app.models.user.query().findOne({ email, password })
+    if (user) return this.success(user)
     return this.fail()
   }
 }

@@ -1,0 +1,23 @@
+extends layout.pug 
+
+block content
+    h1= t('editUser.editUser')
+
+    form(action= paths.editDeleteUser(user.id), method= 'post')
+        .mb-3
+            label.form-label(for= 'data-firstName')= t('signUp.firstName')
+            input.form-control(type= 'text', placeholder= t('signUp.firstName'), name= 'data[firstName]', id= 'data-firstName', value= user.firstName)
+        
+        .mb-3
+            label.form-label(for= 'data-lastName')= t('signUp.lastName')
+            input.form-control(type= 'text', placeholder= t('signUp.lastName'), name= 'data[lastName]', value= user.lastName)
+
+        .mb-3
+            label.form-label(for= 'data-email')= t('signUp.email')
+            input.form-control(type= 'text', placeholder= t('signUp.email'), name= 'data[email]', value= user.email)
+
+        .mb-3
+            label.form-label(for= 'data-password')= t('signUp.password')
+            input.form-control(type= 'password', placeholder= t('signUp.password'), name= 'data[password]', value= user.password)
+
+        button.btn.btn-primary(type= 'submit')= t('signUp.submit')

@@ -9,6 +9,10 @@ const session = () => '/session/'
 
 const login = () => session() + 'new/'
 
+const editUser = (id) => users() + 'edit/' + (id ?? ':id')
+
+const editDeleteUser = (id) => users() + (id ?? ':id')
+
 const main = () => '/'
 
 export const paths = {
@@ -17,6 +21,8 @@ export const paths = {
     main,
     session,
     login,
+    editUser,
+    editDeleteUser,
 }
 
 export default (app) => {

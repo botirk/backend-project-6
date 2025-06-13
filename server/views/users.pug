@@ -21,5 +21,5 @@ block content
                         td= user.email
                         td= timestamp(user.createDate)
                         td.d-flex.flex-wrap
-                            a.btn.btn-primary.me-1= t('users.edit')
+                            a(href= paths.editUser(user.id)).btn.btn-primary.me-1= t('users.edit')
                             +buttonTo(paths.users() + user.id, 'delete')(class= 'btn btn-danger', value= t('users.delete'))
