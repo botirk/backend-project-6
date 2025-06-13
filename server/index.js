@@ -3,10 +3,7 @@ import path from 'path'
 import fastifyStatic from '@fastify/static'
 import fastifyView from '@fastify/view'
 import fastifyFormbody from '@fastify/formbody'
-import fastifySecureSession from '@fastify/secure-session'
 import fastifySensible from '@fastify/sensible'
-import fastifyFlash from '@fastify/flash'
-import { plugin as fastifyReverseRoutes } from 'fastify-reverse-routes'
 import qs from 'qs'
 import Pug from 'pug'
 import i18next from 'i18next'
@@ -16,11 +13,17 @@ import en from './locales/en.js'
 import ru from './locales/ru.js'
 import addRoutes, { paths } from './routes/index.js'
 import * as knexConfig from '../knexfile.js'
+import addAuth from './auth.js'
 
-const __dirname = fileURLToPath(path.dirname(import.meta.url));
-const mode = process.env.NODE_ENV || 'development';
+const __dirname = fileURLToPath(path.dirname(import.meta.url))
+const mode = process.env.NODE_ENV || 'development'
 
 const setUpViews = (app) => {
+  app.addHook('preHandler', async (req, res) => {
+    res.locals = {
+      isAuthenticated: () => req.isAuthenticated(),
+    }
+  })
   app.register(fastifyView, {
     engine: {
       pug: Pug,
@@ -31,24 +34,16 @@ const setUpViews = (app) => {
       timestamp: (date) => new Date(date).toLocaleString()
     },
     templates: path.join(__dirname, '..', 'server', 'views'),
-  });
+  })
 
   app.decorateReply('render', function render(viewPath, vars) {
     return this.view(viewPath, { ...vars, flash: this.flash() ?? [] });
-  });
+  })
 };
 
 const registerPlugins = async (app) => {
   await app.register(fastifySensible)
-  await app.register(fastifyReverseRoutes)
   await app.register(fastifyFormbody, { parser: qs.parse })
-  await app.register(fastifySecureSession, {
-    secret: process.env.SESSION_KEY,
-    cookie: {
-      path: '/',
-    },
-  })
-  await app.register(fastifyFlash)
   await app.register(fastifyStatic, {
     root: path.join(__dirname, '..', 'assets'),
     prefix: '/assets/'
@@ -58,7 +53,7 @@ const registerPlugins = async (app) => {
   await knex.migrate.latest()
   for (const model of Object.values(models)) model.knex(knex)
   app.decorate('models', models)
-};
+}
 
 const setupLocalization = async () => {
   await i18next
@@ -70,14 +65,16 @@ const setupLocalization = async () => {
         ru
       },
     });
-};
+}
 
 export default async (app, _options) => {
+  await addAuth(app);
   await registerPlugins(app);
-
+  
   await setupLocalization();
   setUpViews(app);
   addRoutes(app);
+  
 
   return app;
-};
+}

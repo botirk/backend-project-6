@@ -1,6 +1,7 @@
 import i18next from "i18next"
 import { ValidationError } from "objection"
 import { paths } from "./index.js"
+import { encrypt } from "../auth.js"
 
 export default (app) => {
     app.get(paths.signUp(), (_, res) => {
@@ -10,6 +11,7 @@ export default (app) => {
     app.post(paths.users(), async (req, res) => {        
         try {
             const validUser = await app.models.user.fromJson(req.body.data)
+            validUser.password = encrypt(validUser.password)
             await app.models.user.query().insert(validUser)
             req.flash('success', i18next.t('signUp.success'))
             return res.redirect(paths.main())
@@ -22,12 +24,9 @@ export default (app) => {
                 req.flash('warning', Object.keys(e.data).map(key => `${i18next.t('users.errorIn')} ${i18next.t(`signUp.${key}`)}`))
                 return res.render('signUp.pug', { user, errors: e.data })
             } else {
-                req.flash('warning', i18next('users.error'))
+                req.flash('warning', i18next.t('users.error'))
                 return res.render('signUp.pug', { user })
             }
-            
-            
-            
         }
     })
 

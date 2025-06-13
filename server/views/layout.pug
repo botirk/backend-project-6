@@ -1,10 +1,12 @@
+include mixins.pug
+
 doctype html
 head
     meta(charset="UTF-8")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
     link(rel="stylesheet", href="/assets/bootstrap.min.css")
     title @Hexlet/code
-    script(src="/assets/bootstrap.bundle.min.js")
+    script(src="/assets/bootstrap.min.js")
 body 
     header.p-3.text-bg-dark 
         .container 
@@ -15,8 +17,11 @@ body
                     li
                         a.nav-link(href= paths.users())= t('layout.users')
                 .d-flex.align-items-center.flex-wrap.justify-content-end
-                    a.btn.btn-outline-light.me-2= t('layout.login')
-                    a.btn.btn-primary(href= paths.signUp())= t('layout.signUp')
+                    if isAuthenticated()
+                        +buttonTo(paths.session(), 'delete')(class="btn btn-primary" value= t('layout.logout'))
+                    else 
+                        a(href= paths.login()).btn.btn-outline-light.me-2= t('layout.login')
+                        a(href= paths.signUp()).btn.btn-primary= t('layout.signUp')
     .container.p-3
         each messages, type in flash
             each message in messages

@@ -1,4 +1,5 @@
 import usersRoute from './users.js'
+import sessionRoute from './session.js'
 
 const users = () => '/users/'
 
@@ -24,4 +25,5 @@ export default (app) => {
     })
 
     usersRoute(app)
+    sessionRoute(app)
 }

@@ -1,7 +1,4 @@
 import { Model as Model } from 'objection'
-import crypto from 'crypto'
-
-export const encrypt = (value) => crypto.createHash('sha256').update(value).digest('hex')
 
 export default class User extends Model {
     static get tableName() {
@@ -21,18 +18,5 @@ export default class User extends Model {
                 createDate: { type: 'string', format: 'date-time' }
             },
         }
-    }
-
-    set password(password) {
-        super.password = encrypt(password)
-    }
-
-    get password() {
-        return super.password
-    }
-
-
-    verifyPassword(password) {
-        return encrypt(password) === this.password;
     }
 }

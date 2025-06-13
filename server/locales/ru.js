@@ -2,6 +2,7 @@ export default {
     translation: {
         layout: {
             signUp: 'Регистрация',
+            logout: 'Выход',
             login: 'Вход',
             users: 'Пользователи',
             main: 'Главная',
@@ -26,6 +27,12 @@ export default {
             delete: 'Удалить',
             errorIn: 'Ошибка в поле',
             error: 'Ошибка',
+        },
+        login: {
+            login: 'Вход',
+            submit: 'Войти',
+            error: 'Неправильный логин или пароль',
+            success: 'Вы залогинены'
         }
     }
 }

@@ -9,7 +9,7 @@
    },
    "scripts": {
       "test": "vitest run",
-      "prestart": "cp node_modules/bootstrap/dist/css/bootstrap.min.css assets/bootstrap.min.css && cp node_modules/bootstrap/dist/js/bootstrap.bundle.min.js assets/bootstrap.bundle.min.js",
+      "prestart": "cp node_modules/bootstrap/dist/css/bootstrap.min.css assets/bootstrap.min.css && cp node_modules/bootstrap/dist/js/bootstrap.min.js assets/bootstrap.min.js",
       "start": "fastify start server/index.js -l debug -P -a 0.0.0.0"
    },
    "author": "botirk",
@@ -23,10 +23,8 @@
       "@fastify/static": "^8.2.0",
       "@fastify/view": "^11.1.0",
       "bootstrap": "^5.3.6",
-      "crypto": "^1.0.1",
       "fastify": "^5.3.3",
       "fastify-cli": "^7.4.0",
-      "fastify-reverse-routes": "^3.0.0",
       "i18next": "^25.2.1",
       "knex": "^3.1.0",
       "lodash": "^4.17.21",

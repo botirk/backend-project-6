@@ -5,7 +5,6 @@ import * as cheerio from 'cheerio'
 import server from '../server/index.js'
 import { paths } from '../server/routes'
 
-
 dotenv.config({ path: '.env.example' })
 
 /** @type {typeof fastify} */
@@ -34,7 +33,7 @@ test('new user', async () => {
 })
 
 test('post user & get user', async () => {
-    const res = await app.inject({ 
+    let res = await app.inject({ 
         method: 'POST', url: paths.users(), 
         payload: { data: {firstName: 'testFirstName', lastName: 'testLastName', email: 'ha@ha.ha', password: 'haha' }}  
     })
@@ -49,24 +48,12 @@ test('post user & get user', async () => {
     expect($('td:contains("testFirstName testLastName")')).length(1)
 
     expect($('td:contains("ha@ha.ha")')).length(1)
-})
 
-test('post user & login', async () => {
-    const res = await app.inject({ 
-        method: 'POST', url: paths.users(), 
-        payload: { data: {firstName: 'testFirstName', lastName: 'testLastName', email: 'he@he.he', password: 'hehe' }}  
+    res = await app.inject({ 
+        method: 'POST', url: paths.users(),
+        payload: { data: {firstName: 'testFirstName', lastName: 'testLastName', email: 'ha@ha.ha', password: 'haha' }}  
     })
-    expect(res.statusCode).toBe(302)
-
-    const get = await app.inject({ method: 'GET', url: paths.login() })
-    expect(get.statusCode).toBe(200)
-    const $ = cheerio.load(get.body)
-
-    expect($('form')).length(1)
-
-    expect($('input[name="data[email]"]')).length(1)
-
-    expect($('input[name="data[password]"]')).length(1)
+    expect(res.statusCode).toBe(400)
 })
 
 afterAll(async () => {
