@@ -47,6 +47,10 @@ export default {
             create: 'Создать',
             createSuccess: 'Статус успешно создан',
             createStatus: 'Создать статус',
+            editSuccess: 'Статус успешно изменён',
+            deleteSuccess: 'Статус успешно удалён',
+            editingStatus: 'Изменение статуса',
+            edit: 'Изменить',
         }
     }
 }

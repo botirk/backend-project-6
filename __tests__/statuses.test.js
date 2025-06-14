@@ -19,7 +19,7 @@ afterAll(async () => {
     await app.close()
 })
 
-test.sequential('create status & get status', async() => {
+test.sequential('create status & get status & patch status & delete status', async() => {
     let res = await app.inject({ method: 'GET', url: paths.createStatus() })
     expect(res.statusCode).toBe(302)
 
@@ -39,7 +39,6 @@ test.sequential('create status & get status', async() => {
     res = await inject({ method: 'GET', url: paths.statuses() })
     expect(res.statusCode).toBe(200)
     $ = cheerio.load(res.body)
-
     expect($(`a[href="${paths.createStatus()}"]`)).length(1)
     expect($('td:contains("1")')).length.greaterThanOrEqual(1)
     expect($('td:contains("testStatusName")')).length(1)
@@ -55,4 +54,29 @@ test.sequential('create status & get status', async() => {
     expect($(`form[action="${paths.editDeleteStatus(1)}"][method="post"]`)).length(1)
     expect($('input[name="_method"][value="patch"]')).length(1)
     expect($('input[name="data[name]"]')).length(1)
+
+    res = await inject({ 
+        method: 'POST', url: paths.editDeleteStatus(1), 
+        payload: { data:  { name: 'changedStatusName' }, _method: 'patch' } 
+    })
+    expect(res.statusCode).toBe(302)
+    
+    res = await inject({ method: 'GET', url: paths.statuses() })
+    expect(res.statusCode).toBe(200)
+    $ = cheerio.load(res.body)
+    expect($('td:contains("1")')).length.greaterThanOrEqual(1)
+    expect($('td:contains("testStatusName")')).length(0)
+    expect($('td:contains("changedStatusName")')).length(1)
+
+    res = await inject({ 
+        method: 'POST', url: paths.editDeleteStatus(1), 
+        payload: { _method: 'delete' }
+    })
+    expect(res.statusCode).toBe(302)
+
+    res = await inject({ method: 'GET', url: paths.statuses() })
+    expect(res.statusCode).toBe(200)
+    $ = cheerio.load(res.body)
+    expect($('td:contains("testStatusName")')).length(0)
+    expect($('td:contains("changedStatusName")')).length(0)
 })

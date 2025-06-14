@@ -1,7 +1,7 @@
 extends layout.pug 
 
 block content 
-    h1= t('statuses.creatingStatus')
+    h1= t('statuses.editingStatus')
 
     form(action= paths.editDeleteStatus(status.id), method= 'post')
         .mb-3
@@ -9,4 +9,4 @@ block content
             input(name= '_method', type= 'hidden', value= 'patch')
             input.form-control(id= 'data-name', type= 'text', placeholder= t('statuses.name'), name= 'data[name]', value= status.name)
 
-        button.btn.btn-primary(type= 'submit')= t('statuses.create')
+        button.btn.btn-primary(type= 'submit')= t('statuses.edit')
