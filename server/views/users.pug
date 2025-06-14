@@ -8,11 +8,11 @@ block content
         table.table
             thead 
                 tr
-                    th= t('users.id')
+                    th= t('layout.id')
                     th= t('users.fullName')
                     th= t('users.email')
-                    th= t('users.createDate')
-                    th= t('users.actions')
+                    th= t('layout.createDate')
+                    th= t('layout.actions')
             tbody
                 each user in users 
                     tr 
@@ -21,5 +21,5 @@ block content
                         td= user.email
                         td= timestamp(user.createDate)
                         td.d-flex.flex-wrap
-                            a(href= paths.editUser(user.id)).btn.btn-primary.me-1= t('users.edit')
-                            +buttonTo(paths.users() + user.id, 'delete')(class= 'btn btn-danger', value= t('users.delete'))
+                            a(href= paths.editUser(user.id)).btn.btn-primary.me-1= t('layout.edit')
+                            +buttonTo(paths.editDeleteUser(user.id), 'delete')(class= 'btn btn-danger', value= t('layout.delete'))

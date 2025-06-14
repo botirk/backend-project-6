@@ -6,10 +6,10 @@ block content
     form(action= paths.session(), method= 'post')
         .mb-3
             label.form-label(for= 'data-email')= t('signUp.email')
-            input.form-control(type= 'text', placeholder= t('signUp.email'), name= 'data[email]', value= (user || {}).email)
+            input.form-control(id= 'data-email', type= 'text', placeholder= t('signUp.email'), name= 'data[email]', value= (user || {}).email)
 
         .mb-3
             label.form-label(for= 'data-password')= t('signUp.password')
-            input.form-control(type= 'password', placeholder= t('signUp.password'), name= 'data[password]', value= (user || {}).password)
+            input.form-control(id= 'data-password', type= 'password', placeholder= t('signUp.password'), name= 'data[password]', value= (user || {}).password)
 
         button.btn.btn-primary(type= 'submit')= t('login.submit')

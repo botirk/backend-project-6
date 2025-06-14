@@ -1,5 +1,6 @@
 import usersRoute from './users.js'
 import sessionRoute from './session.js'
+import statusesRoute from './statuses.js'
 
 const users = () => '/users/'
 
@@ -13,6 +14,14 @@ const editUser = (id) => users() + 'edit/' + (id ?? ':id')
 
 const editDeleteUser = (id) => users() + (id ?? ':id')
 
+const statuses = () => '/statuses/'
+
+const createStatus = () => statuses() + 'new'
+
+const editDeleteStatus = (id) => statuses() + (id ?? ':id')
+
+const editStatus = (id) => statuses() + (id ?? ':id') + '/edit'
+
 const main = () => '/'
 
 export const paths = {
@@ -23,6 +32,10 @@ export const paths = {
     login,
     editUser,
     editDeleteUser,
+    statuses,
+    createStatus,
+    editDeleteStatus,
+    editStatus,
 }
 
 export default (app) => {
@@ -30,6 +43,8 @@ export default (app) => {
         res.render('main.pug')
     })
 
+    
     usersRoute(app)
     sessionRoute(app)
+    statusesRoute(app)
 }

@@ -1,0 +1,24 @@
+extends layout.pug 
+include mixins.pug
+
+block content 
+    h1= t('layout.statuses')
+    a(href= paths.createStatus()).btn.btn-primary= t('statuses.createStatus')
+
+    .table-responsive
+        table.table
+            thead 
+                tr
+                    th= t('layout.id')
+                    th= t('statuses.name')
+                    th= t('layout.createDate')
+                    th= t('layout.actions')
+            tbody
+                each status in statuses 
+                    tr 
+                        td= status.id
+                        td= status.name
+                        td= timestamp(status.createDate)
+                        td.d-flex.flex-wrap
+                            a(href= paths.editStatus(status.id)).btn.btn-primary.me-1= t('layout.edit')
+                            +buttonTo(paths.editDeleteStatus(status.id), 'delete')(class= 'btn btn-danger', value= t('layout.delete'))

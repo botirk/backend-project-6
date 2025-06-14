@@ -15,6 +15,10 @@ beforeAll(async () => {
     app = await server(fastify())
 })
 
+afterAll(async () => {
+    await app.close()
+})
+
 test('new user', async () => {
     const res = await app.inject({ method: 'GET', url: paths.signUp() })
     expect(res.statusCode).toBe(200)
@@ -39,7 +43,6 @@ test.sequential('post user & get user', async () => {
     const $ = cheerio.load(get.body)
 
     expect($('td:contains("1")')).length.greaterThanOrEqual(1)
-
     expect($('td:contains("testFirstName testLastName")')).length(1)
     expect($('td:contains("ha@ha.ha")')).length(1)
 
@@ -107,8 +110,4 @@ test.sequential('post user & delete user', async () => {
     del = await app.inject({ method: 'GET', url: paths.users() })
     $ = cheerio.load(del.body)
     expect($('td:contains("anotherEmail")')).length(0)
-})
-
-afterAll(async () => {
-    await app.close()
 })

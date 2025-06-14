@@ -4,11 +4,17 @@ export default {
             signUp: 'Регистрация',
             logout: 'Выход',
             login: 'Вход',
+            statuses: 'Статусы',
             users: 'Пользователи',
             main: 'Главная',
             401: 'Доступ запрещён! Пожалуйста, авторизируйтесь.',
             errorIn: 'Ошибка в поле',
             error: 'Ошибка',
+            id: 'ID',
+            actions: 'Действия',
+            createDate: 'Дата создания',
+            edit: 'Изменить',
+            delete: 'Удалить',
         },
         signUp: {
             signUp: 'Регистрация',
@@ -22,12 +28,7 @@ export default {
         users: {
             users: 'Пользователи',
             fullName: 'Полное имя',
-            createDate: 'Дата создания',
-            actions: 'Действия',
             email: 'Email',
-            id: 'ID',
-            edit: 'Изменить',
-            delete: 'Удалить',
         },
         login: {
             login: 'Вход',
@@ -39,6 +40,13 @@ export default {
             editUser: 'Изменение пользователя',
             success: 'Пользователь успешно изменен',
             deleted: 'Пользователь успешно удалён',
+        },
+        statuses: {
+            creatingStatus: 'Создание статуса',
+            name: 'Наименование',
+            create: 'Создать',
+            createSuccess: 'Статус успешно создан',
+            createStatus: 'Создать статус',
         }
     }
 }

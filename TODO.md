@@ -1,3 +1,11 @@
+GET /statuses - страница со списком всех статусов
+GET /statuses/new - страница создания статуса
+GET /statuses/:id/edit - страница редактирования статуса
+POST /statuses - создание нового статуса
+PATCH /statuses/:id - обновление статуса
+DELETE /statuses/:id - удаление статуса
+
+
 
 
 

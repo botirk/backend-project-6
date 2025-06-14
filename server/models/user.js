@@ -1,4 +1,4 @@
-import { Model as Model } from 'objection'
+import { Model } from 'objection'
 
 export default class User extends Model {
     static get tableName() {

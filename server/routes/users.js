@@ -30,7 +30,7 @@ export default (app) => {
     app.get(paths.users(), async (_, res) => {
         const users = await app.models.user.query()
             .select('firstName', 'lastName', 'email', 'id', 'createDate')
-            .orderBy('id');
+            .orderBy('id')
 
         return res.render('users.pug', { users })
     })

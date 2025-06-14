@@ -16,6 +16,9 @@ body
                         a.nav-link(href= paths.main())= t('layout.main')
                     li
                         a.nav-link(href= paths.users())= t('layout.users')
+                    if isAuthenticated()
+                        li
+                            a.nav-link(href= paths.statuses())= t('layout.statuses')
                 .d-flex.align-items-center.flex-wrap.justify-content-end
                     if isAuthenticated()
                         +buttonTo(paths.session(), 'delete')(class="btn btn-primary" value= t('layout.logout'))
