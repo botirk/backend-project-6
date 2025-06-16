@@ -1,0 +1,36 @@
+extends layout.pug 
+
+block content 
+    h1= t('statuses.creatingStatus')
+
+    form(action= paths.tasks(), method= 'post')
+        .mb-3
+            label.form-label(for= 'data-name')= t('tasks.name')
+            input.form-control(id = 'data-name', type= 'text', placeholder= t('tasks.name'), name= 'data[name]', value= (task || {}).name)
+
+        .mb-3
+            label.form-label(for= 'data-description')= t('tasks.description')
+            textarea.form-control(id = 'data-description', name= 'data[description]')= (task || {}).description
+
+        .mb-3
+            label.form-label(for= 'data-statusId')= t('tasks.status')
+            select.form-control(id = 'data-statusId', name= 'data[statusId]')
+                option
+                each status in statuses 
+                    option(value= status.id)= status.name
+
+        .mb-3
+            label.form-label(for= 'data-executorId')= t('tasks.executor')
+            select.form-control(id = 'data-executorId', name= 'data[executorId]')
+                option
+                each user in users 
+                    option(value= user.id)= user.firstName + ' ' + user.lastName
+
+        .mb-3
+            label.form-label(for= 'data-labels')= t('tasks.labels')
+            select.form-control(id = 'data-labels', name= 'data[labels]', multiple= 'multiple')
+                each label in labels
+                    option(value= label.id)= label.name
+
+
+        button.btn.btn-primary(type= 'submit')= t('tasks.create')

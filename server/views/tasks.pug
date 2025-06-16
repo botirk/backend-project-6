@@ -1,0 +1,33 @@
+extends layout.pug 
+include mixins.pug
+
+block content 
+    h1= t('tasks.tasks')
+    a(href= paths.createTask()).btn.btn-primary= t('tasks.createTask')
+
+    .table-responsive
+        table.table
+            thead 
+                tr
+                    th= t('layout.id')
+                    th= t('tasks.name')
+                    th= t('tasks.status')
+                    th= t('tasks.author')
+                    th= t('tasks.executor')
+                    th= t('layout.createDate')
+                    th= t('layout.actions')
+            tbody
+                each task in tasks
+                    tr 
+                        td= task.id
+                        td
+                            a(href= paths.showEditDeleteTask(task.id))=  task.name
+                        td= task.status.name
+                        td= task.creator.firstName + ' ' + task.creator.lastName
+                        td
+                            if task.executor 
+                                = task.executor.firstName + ' ' + task.executor.lastName
+                        td= timestamp(task.createDate)
+                        td.d-flex.flex-wrap
+                            a(href= paths.editTask(task.id)).btn.btn-primary.me-1= t('layout.edit')
+                            +buttonTo(paths.showEditDeleteTask(task.id), 'delete')(class= 'btn btn-danger', value= t('layout.delete'))

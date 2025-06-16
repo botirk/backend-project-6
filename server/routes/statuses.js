@@ -10,7 +10,7 @@ export default (app) => {
 
     app.post(paths.statuses(), userGuard(), async (req, res) => {
         try {
-            const validStatus = await app.models.status.fromJson(req.body.data)
+            const validStatus = app.models.status.fromJson(req.body.data)
             await app.models.status.query().insert(validStatus)
             req.flash('success', i18next.t('statuses.createSuccess'))
             return res.redirect(paths.statuses())
@@ -46,7 +46,7 @@ export default (app) => {
     app.post(paths.editDeleteStatus(':id'), userGuard(), async (req, res) => {
         if (req.body._method === 'patch') {
             try {
-                const validStatus = await app.models.status.fromJson(req.body.data)
+                const validStatus = app.models.status.fromJson(req.body.data)
                 await app.models.status.query().update(validStatus).where('id', req.params.id)
                 req.flash('success', i18next.t('statuses.editSuccess'))
                 return res.redirect(paths.statuses())

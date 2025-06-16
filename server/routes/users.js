@@ -9,7 +9,7 @@ export default (app) => {
 
     app.post(paths.users(), async (req, res) => {        
         try {
-            const validUser = await app.models.user.fromJson(req.body.data)
+            const validUser = app.models.user.fromJson(req.body.data)
             await app.models.user.query().insert(validUser)
             req.flash('success', i18next.t('signUp.success'))
             return res.redirect(paths.main())
@@ -55,7 +55,7 @@ export default (app) => {
             return res.redirect(paths.users())
         }
         try {
-            const validUser = await app.models.user.fromJson(req.body.data)
+            const validUser = app.models.user.fromJson(req.body.data)
             await app.models.user.query().update(validUser).where('id', req.user.id)
             req.flash('success', i18next.t('editUser.success'))
             return res.redirect(paths.users())

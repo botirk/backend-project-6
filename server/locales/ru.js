@@ -51,6 +51,21 @@ export default {
             deleteSuccess: 'Статус успешно удалён',
             editingStatus: 'Изменение статуса',
             edit: 'Изменить',
+        },
+        tasks: {
+            tasks: 'Задачи',
+            creatingTask: 'Создание задачи',
+            createTask: 'Создать задачу',
+            name: 'Наименование',
+            description: 'Описание',
+            status: 'Статус',
+            statusId: 'Статус',
+            executor: 'Исполнитель',
+            executorId: 'Исполнитель',
+            labels: 'Метки',
+            create: 'Создать',
+            createSuccess: 'Задача успешно создана',
+            author: 'Автор'
         }
     }
 }

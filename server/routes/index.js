@@ -1,6 +1,7 @@
 import usersRoute from './users.js'
 import sessionRoute from './session.js'
 import statusesRoute from './statuses.js'
+import tasksRoute from './tasks.js'
 
 const users = () => '/users/'
 
@@ -24,6 +25,14 @@ const editStatus = (id) => statuses() + (id ?? ':id') + '/edit'
 
 const main = () => '/'
 
+const tasks = () => '/tasks/'
+
+const createTask = () => tasks() + 'new'
+
+const editTask = (id) => tasks() + (id ?? ':id') + '/edit'
+
+const showEditDeleteTask = (id) => tasks() + (id ?? ':id')
+
 export const paths = {
     users,
     signUp,
@@ -36,6 +45,10 @@ export const paths = {
     createStatus,
     editDeleteStatus,
     editStatus,
+    tasks,
+    createTask,
+    editTask,
+    showEditDeleteTask,
 }
 
 export default (app) => {
@@ -47,4 +60,5 @@ export default (app) => {
     usersRoute(app)
     sessionRoute(app)
     statusesRoute(app)
+    tasksRoute(app)
 }

@@ -1,4 +1,7 @@
-DELETE /statuses/:id - удаление статуса
+GET /tasks/:id - страница просмотра задачи
+GET /tasks/:id/edit - страница редактирования задачи
+PATCH /tasks/:id - обновление задачи
+DELETE /tasks/:id - удаление задачи
 
 + GET /users - страница со списком всех пользователей
 + GET /users/new - страница регистрации
@@ -14,3 +17,7 @@ DELETE /statuses/:id - удаление статуса
 + GET /statuses/:id/edit - страница редактирования статуса
 + POST /statuses - создание нового статуса
 + PATCH /statuses/:id - обновление статуса
++ DELETE /statuses/:id - удаление статуса
++ GET /tasks - страница со списком всех задач
++ GET /tasks/new - страница создания задачи
++ POST /tasks - создание новой задачи
