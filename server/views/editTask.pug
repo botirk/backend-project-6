@@ -1,9 +1,9 @@
 extends layout.pug 
 
 block content 
-    h1= t('tasks.creatingTask')
+    h1= t('tasks.editingTask')
 
-    form(action= paths.tasks(), method= 'post')
+    form(action= paths.showEditDeleteTask(task.id), method= 'post')
         .mb-3
             label.form-label(for= 'data-name')= t('tasks.name')
             input.form-control(id = 'data-name', type= 'text', placeholder= t('tasks.name'), name= 'data[name]', value= (task || {}).name)
@@ -14,10 +14,10 @@ block content
 
         .mb-3
             label.form-label(for= 'data-statusId')= t('tasks.status')
-            select.form-control(id = 'data-statusId', name= 'data[statusId]', value= (task || {}).statusId)
+            select.form-control(id = 'data-statusId', name= 'data[statusId]')
                 option(autocomplete= 'off')
                 each status in statuses 
-                    option(value= status.id, autocomplete= 'off', selected= ((task || {}).statusId==status.id) ? 'true' : false)= status.name
+                    option(value= status.id, autocomplete= 'off', selected= (task.statusId==status.id) ? 'true' : false)= status.name
 
         .mb-3
             label.form-label(for= 'data-executorId')= t('tasks.executor')
@@ -33,4 +33,4 @@ block content
                     option(value= label.id)= label.name
 
 
-        button.btn.btn-primary(type= 'submit')= t('tasks.create')
+        button.btn.btn-primary(type= 'submit')= t('tasks.edit')

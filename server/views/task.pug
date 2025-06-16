@@ -1,0 +1,23 @@
+extends layout.pug 
+include mixins.pug
+
+block content 
+    h1= task.name
+
+    .shadow.mt-5.p-3
+        .lead.mb-3= task.description
+        hr.mb-3
+        .badge.bg-danger.text-white.mb-3= task.status.name
+        .d-flex.flex-wrap.mb-3 
+            span.text-muted.me-2= t('tasks.author')
+            span= task.creator.firstName + ' ' + task.creator.lastName
+        if task.executor
+            .d-flex.flex-wrap.mb-3 
+                span.text-muted.me-2= t('tasks.executor')
+                span= task.executor.firstName + ' ' + task.executor.lastName
+        .d-flex.flex-wrap.mb-3 
+            span.text-muted.me-2= t('layout.createDate')
+            span= timestamp(task.createDate)
+        .d-flex.flex-wrap
+            a(href= paths.editTask(task.id)).btn.btn-primary.me-1= t('layout.edit')
+            +buttonTo(paths.showEditDeleteTask(task.id), 'delete')(class= 'btn btn-danger', value= t('layout.delete'))

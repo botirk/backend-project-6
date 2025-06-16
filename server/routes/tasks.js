@@ -28,6 +28,15 @@ const tasksOptions = async (app) => {
     return { tasks }
 }
 
+const getTask = async (app, id) => {
+    const task = await app.models.task.query().findById(id)
+    if (!task) return
+    task.status = await app.models.status.query().findById(task.statusId)
+    task.creator = await app.models.user.query().findById(task.creatorId)
+    if (task.executorId) task.executor = await app.models.user.query().findById(task.executorId)
+    return task
+}
+
 export default (app) => {
     app.get(paths.createTask(), userGuard(), async (_, res) => {
         return res.render('createTask.pug', await taskOptions(app))
@@ -56,5 +65,23 @@ export default (app) => {
 
     app.get(paths.tasks(), userGuard(), async (_, res) => {
         return res.render('tasks.pug', await tasksOptions(app))
+    })
+
+    app.get(paths.showEditDeleteTask(':id'), userGuard(), async (req, res) => {
+        const task = await getTask(app, req.params.id)
+        if (!task) {
+            req.flash('warning', i18next.t('layout.404'))
+            return res.redirect(paths.tasks())
+        }
+        return res.render('task.pug', { task })
+    })
+
+    app.get(paths.editTask(':id'), userGuard(), async (req, res) => {
+        const task = await app.models.task.query().findById(req.params.id)
+        if (!task) {
+            req.flash('warning', i18next.t('layout.404'))
+            return res.redirect(paths.tasks())
+        }
+        return res.render('editTask.pug', await taskOptions(app, task))
     })
 }
