@@ -4,9 +4,9 @@ block content
     h1= t('statuses.editingStatus')
 
     form(action= paths.editDeleteStatus(status.id), method= 'post')
+        input(name= '_method', type= 'hidden', value= 'patch')
         .mb-3
             label.form-label(for= 'data-name')= t('statuses.name')
-            input(name= '_method', type= 'hidden', value= 'patch')
             input.form-control(id= 'data-name', type= 'text', placeholder= t('statuses.name'), name= 'data[name]', value= status.name)
 
         button.btn.btn-primary(type= 'submit')= t('statuses.edit')

@@ -69,6 +69,8 @@ export default {
             author: 'Автор',
             edit: 'Изменить',
             editingTask: 'Изменение задачи',
+            editSuccess: 'Задача успешно изменена',
+            deleteSuccess: 'Задача успешно удалена',
         }
     }
 }
