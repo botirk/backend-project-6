@@ -50,7 +50,7 @@ const registerPlugins = async (app) => {
   })
 
   const knex = Knex(knexConfig[mode])
-  await knex.raw('PRAGMA foreign_keys = ON;')
+  if (mode !== 'production') await knex.raw('PRAGMA foreign_keys = ON;')
   await knex.migrate.latest()
   for (const model of Object.values(models)) model.knex(knex)
   app.decorate('models', models)
