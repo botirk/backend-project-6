@@ -7,9 +7,10 @@
       "node": ">=16.x"
    },
    "scripts": {
+      "build": "npm run prestart",
       "test": "vitest run",
       "testci": "npm ci && npx vitest run",
-      "prestart": "cp node_modules/bootstrap/dist/css/bootstrap.min.css assets/bootstrap.min.css && cp node_modules/bootstrap/dist/js/bootstrap.min.js assets/bootstrap.min.js",
+      "prestart": "mkdir -p dist && cp node_modules/bootstrap/dist/css/bootstrap.min.css dist/bootstrap.min.css && cp node_modules/bootstrap/dist/js/bootstrap.min.js dist/bootstrap.min.js",
       "start": "fastify start server/index.js -l debug -P -a 0.0.0.0",
       "lint": "eslint",
       "lintwithinstall": "npm ci && npx eslint"

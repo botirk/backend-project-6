@@ -45,8 +45,8 @@ const registerPlugins = async (app) => {
   await app.register(fastifySensible)
   await app.register(fastifyFormbody, { parser: qs.parse })
   await app.register(fastifyStatic, {
-    root: path.join(__dirname, '..', 'assets'),
-    prefix: '/assets/',
+    root: path.join(__dirname, '..', 'dist'),
+    prefix: '/dist/',
   })
 
   const knex = Knex(knexConfig[mode])
