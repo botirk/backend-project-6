@@ -1,9 +1,9 @@
-import { Strategy } from '@fastify/passport';
+import { Strategy } from '@fastify/passport'
 import fastifySecureSession from '@fastify/secure-session'
 import fastifyPassport from '@fastify/passport'
 import { timingSafeEqual, createHash } from 'node:crypto'
 
-export const encrypt = (value) => createHash('sha256').update(value).digest('hex')
+export const encrypt = value => createHash('sha256').update(value).digest('hex')
 
 class FormStrategy extends Strategy {
   constructor(name, app) {
@@ -34,7 +34,7 @@ export default async (app) => {
     },
   })
   fastifyPassport.registerUserDeserializer(user => app.models.user.query().findById(user.id))
-  fastifyPassport.registerUserSerializer((user) => Promise.resolve(user))
+  fastifyPassport.registerUserSerializer(user => Promise.resolve(user))
   fastifyPassport.use(new FormStrategy('form', app))
   await app.register(fastifyPassport.initialize())
   await app.register(fastifyPassport.secureSession())

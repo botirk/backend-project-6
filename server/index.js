@@ -31,22 +31,22 @@ const setUpViews = (app) => {
     },
     defaultContext: {
       paths,
-      t: (key) => i18next.t(key),
-      timestamp: (date) => new Date(date).toLocaleString()
+      t: key => i18next.t(key),
+      timestamp: date => new Date(date).toLocaleString(),
     },
     templates: path.join(__dirname, '..', 'server', 'views'),
   })
   app.decorateReply('render', function render(viewPath, vars) {
-    return this.view(viewPath, { ...vars, flash: this.flash() ?? [] });
+    return this.view(viewPath, { ...vars, flash: this.flash() ?? [] })
   })
-};
+}
 
 const registerPlugins = async (app) => {
   await app.register(fastifySensible)
   await app.register(fastifyFormbody, { parser: qs.parse })
   await app.register(fastifyStatic, {
     root: path.join(__dirname, '..', 'assets'),
-    prefix: '/assets/'
+    prefix: '/assets/',
   })
 
   const knex = Knex(knexConfig[mode])
@@ -63,19 +63,20 @@ const setupLocalization = async () => {
       fallbackLng: 'en',
       resources: {
         en,
-        ru
+        ru,
       },
-    });
+    })
 }
 
+// eslint-disable-next-line
 export default async (app, _options) => {
-  await addAuth(app);
-  await registerPlugins(app);
-  
-  await setupLocalization();
-  setUpViews(app);
-  addRoutes(app);
-  
+  await addAuth(app)
+  await registerPlugins(app)
+
+  await setupLocalization()
+  setUpViews(app)
+  addRoutes(app)
+
   if (process.env.ROLLBAR_TOKEN) {
     new Rollbar({
       accessToken: process.env.ROLLBAR_TOKEN,
@@ -84,5 +85,5 @@ export default async (app, _options) => {
     }).log('Server started')
   }
 
-  return app;
+  return app
 }
