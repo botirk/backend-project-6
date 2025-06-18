@@ -14,6 +14,7 @@ import ru from './locales/ru.js'
 import addRoutes, { paths } from './routes/index.js'
 import * as knexConfig from '../knexfile.js'
 import addAuth from './auth.js'
+import Rollbar from 'rollbar'
 
 const __dirname = fileURLToPath(path.dirname(import.meta.url))
 const mode = process.env.NODE_ENV || 'development'
@@ -74,6 +75,14 @@ export default async (app, _options) => {
   await setupLocalization();
   setUpViews(app);
   addRoutes(app);
+  
+  if (process.env.ROLLBAR_TOKEN) {
+    new Rollbar({
+      accessToken: process.env.ROLLBAR_TOKEN,
+      captureUncaught: true,
+      captureUnhandledRejections: true,
+    })
+  }
   
 
   return app;

@@ -1,4 +1,4 @@
-import { ValidationError } from "objection"
+import { ForeignKeyViolationError, ValidationError } from "objection"
 import { userGuard } from "./guards.js"
 import { paths } from "./index.js"
 import i18next from "i18next"
@@ -21,7 +21,48 @@ const taskOptions = async (app, task = undefined) => {
     return result
 }
 
-const getTasks = async (app) => await app.models.task.query().orderBy('id').withGraphFetched({ status: true, creator: true, executor: true, labels: true })
+const tasksOptions = async (app, req) => {
+    let tasks = app.models.task.query().orderBy('id').withGraphFetched({ status: true, creator: true, executor: true, labels: true })
+
+    if (req.query.status) {
+        const statusId = parseInt(req.query.status)
+        if (!isNaN(statusId)) {
+            tasks = tasks.where('statusId', statusId)
+        }
+    }
+
+    if (req.query.executor) {
+        const executorId = parseInt(req.query.executor)
+        if (!isNaN(executorId)) {
+            tasks = tasks.where('executorId', executorId)
+        }
+    }
+
+    if (req.query.label) {
+        const labelId = parseInt(req.query.label)
+        if (!isNaN(labelId)) {
+            const taskIds = (await app.models.taskLabel.query().where('labelId', labelId)).map(taskLabel => taskLabel.taskId)
+            tasks = tasks.whereIn('id', taskIds)
+        }
+    }
+
+    if (req.query.isCreatorUser) {
+        tasks = tasks.where('creatorId', req.user.id)
+    }
+
+    return {
+        tasks: await tasks,
+        statuses: await app.models.status.query().orderBy('id'),
+        users: await app.models.user.query().select('id', 'firstName', 'lastName').orderBy('id'),
+        labels: await app.models.label.query().orderBy('id'),
+        query: {
+            status: req.query.status,
+            executor: req.query.executor,
+            label: req.query.label,
+            isCreatorUser: req.query.isCreatorUser,
+        },
+    }
+}
 
 const getTask = async (app, id) => await app.models.task.query().findById(id).withGraphFetched({ status: true, creator: true, executor: true, labels: true })
 
@@ -65,16 +106,13 @@ export default (app) => {
         }
     })
 
-    app.get(paths.tasks(), userGuard(), async (_, res) => {
-        return res.render('tasks.pug', { tasks: await getTasks(app) })
+    app.get(paths.tasks(), userGuard(), async (req, res) => {
+        return res.render('tasks.pug', await tasksOptions(app, req))
     })
 
     app.get(paths.showEditDeleteTask(':id'), userGuard(), async (req, res) => {
         const task = await getTask(app, req.params.id)
-        if (!task) {
-            req.flash('warning', i18next.t('layout.404'))
-            return res.redirect(paths.tasks())
-        }
+        if (!task) return res.callNotFound()
         return res.render('task.pug', { task })
     })
 
@@ -88,11 +126,18 @@ export default (app) => {
     })
 
     app.post(paths.showEditDeleteTask(':id'), userGuard(), async (req, res) => {
-        if (req.body._method === 'patch') {
+        if (!(await app.models.task.query().findById(req.params.id))) {
+            return res.callNotFound()
+        } 
+        else if (req.body._method === 'patch') {
+            fixTask(req)
             try {
-                fixTask(req)
                 const validTask = app.models.task.fromJson(req.body.data)
-                await app.models.task.query().update(validTask).where('id', req.params.id)
+                await app.models.task.transaction(async (trx) => {
+                    await app.models.taskLabel.query(trx).delete().where('taskId', req.params.id)
+                    await app.models.task.query(trx).findById(req.params.id).patch(validTask)
+                    for (const label of req.body.data.labels) await app.models.task.relatedQuery('labels', trx).for(req.params.id).relate(label)
+                })
                 req.flash('success', i18next.t('tasks.editSuccess'))
                 return res.redirect(paths.tasks())
             } catch (e) {
@@ -110,15 +155,23 @@ export default (app) => {
             }
         } else if (req.body._method === 'delete') {
             try {
-                await app.models.task.query().deleteById(req.params.id)
+                await app.models.task.transaction(async (trx) => {
+                    await app.models.taskLabel.query(trx).delete().where('taskId', req.params.id)
+                    await app.models.task.query(trx).deleteById(req.params.id)
+                })
                 req.flash('info', i18next.t('tasks.deleteSuccess'))
                 return res.redirect(paths.tasks())
-            } catch {
-                return res.callNotFound()
+            } catch (e) {
+                console.warn(e)
+                if (e instanceof ForeignKeyViolationError) {
+                    req.flash('warning', i18next.t('tasks.deleteLinkedResource'))
+                    return res.redirect(paths.tasks())
+                } else {
+                    return res.callNotFound()
+                }
             }
         } else {
-            req.flash('warning', i18next.t('layout.404'))
-            return res.redirect(paths.tasks())
+            return res.callNotFound()
         }
     })
 }

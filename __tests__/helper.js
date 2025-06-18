@@ -25,3 +25,8 @@ export const createLabel = (name = 'testLabel') => ({
     method: 'POST', url: paths.labels(),
     payload: { data: { name }}
 })
+
+export const deleteStatus = (id) => ({
+    method: 'POST', url: paths.editDeleteStatus(id),
+    payload: { _method: 'delete' }
+})

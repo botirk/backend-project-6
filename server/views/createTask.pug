@@ -14,21 +14,21 @@ block content
 
         .mb-3
             label.form-label(for= 'data-statusId')= t('tasks.status')
-            select.form-control(id = 'data-statusId', name= 'data[statusId]', value= (task || {}).statusId)
+            select.form-select.form-control(id = 'data-statusId', name= 'data[statusId]', value= (task || {}).statusId)
                 option(autocomplete= 'off')
                 each status in statuses 
                     option(value= status.id, autocomplete= 'off', selected= ((task || {}).statusId==status.id) ? 'true' : false)= status.name
 
         .mb-3
             label.form-label(for= 'data-executorId')= t('tasks.executor')
-            select.form-control(id = 'data-executorId', name= 'data[executorId]')
+            select.form-select(id = 'data-executorId', name= 'data[executorId]')
                 option
                 each user in users 
                     option(value= user.id)= user.firstName + ' ' + user.lastName
 
         .mb-3
             label.form-label(for= 'data-labels')= t('tasks.labels')
-            select.form-control(id = 'data-labels', name= 'data[labels]', multiple= 'multiple')
+            select.form-select(id = 'data-labels', name= 'data[labels]', multiple= 'multiple')
                 each label in labels
                     option(value= label.id)= label.name
 

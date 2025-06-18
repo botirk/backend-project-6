@@ -71,8 +71,14 @@ export default (app) => {
                 await app.models.label.query().deleteById(req.params.id)
                 req.flash('info', i18next.t('labels.deleteSuccess'))
                 return res.redirect(paths.labels())
-            } catch {
-                return res.callNotFound() 
+            } catch (e) {
+                console.warn(e)
+                if (e instanceof ForeignKeyViolationError) {
+                    req.flash('warning', i18next.t('tasks.deleteLinkedResource'))
+                    return res.redirect(paths.labels())
+                } else {
+                    return res.callNotFound()
+                }
             }
         } else {
             return res.callNotFound()

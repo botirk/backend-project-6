@@ -1,9 +1,39 @@
 extends layout.pug 
 include mixins.pug
 
-block content 
-    h1= t('tasks.tasks')
-    a(href= paths.createTask()).btn.btn-primary= t('tasks.createTask')
+block content
+    .d-flex.justify-content-between.align-items-center.mb-3
+        h1= t('tasks.tasks')
+        a(href= paths.createTask()).btn.btn-primary= t('tasks.createTask')
+
+    .card.mb-3
+        .card-body.p-3
+            form(actions= paths.tasks(), method= 'get')
+                .row
+                    .input-group.mb-3.col
+                        label(for= 'data-status').input-group-text= t('tasks.status')
+                        select.form-select.form-control(id = 'data-status', name= 'status')
+                            option(autocomplete= 'off')
+                            each status in statuses
+                                option(value= status.id, autocomplete= 'off' selected= (status.id == query.status))= status.name
+                    .input-group.mb-3.col
+                        label(for= 'data-executor').input-group-text= t('tasks.executor')
+                        select.form-select.form-control(id = 'data-executor', name= 'executor')
+                            option(autocomplete= 'off')
+                            each user in users
+                                option(value= user.id, autocomplete= 'off', selected= (user.id == query.executor))= user.firstName + ' ' + user.lastName
+                    .input-group.mb-3.col
+                        label(for= 'data-label').input-group-text= t('tasks.label')
+                        select.form-select.form-control(id = 'data-label', name= 'label')
+                            option(autocomplete= 'off')
+                            each label in labels
+                                option(value= label.id, autocomplete= 'off', selected= (label.id == query.label))= label.name
+                .form-check.mb-3 
+                    input(id= 'data_isCreatorUser', type= 'checkbox', name= 'isCreatorUser').form-check-input
+                    label(for='data_isCreatorUser').form-check-label= t('tasks.onlyMyTasks')
+                input(type= 'submit', value= t('tasks.show')).btn.btn-primary
+
+
 
     .table-responsive
         table.table

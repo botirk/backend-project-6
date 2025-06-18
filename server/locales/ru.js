@@ -71,6 +71,10 @@ export default {
             editingTask: 'Изменение задачи',
             editSuccess: 'Задача успешно изменена',
             deleteSuccess: 'Задача успешно удалена',
+            label: 'Метка',
+            onlyMyTasks: 'Только мои задачи',
+            show: 'Показать',
+            deleteLinkedResource: 'Удалите связаный ресурс!'
         },
         labels: {
             creatingLabel: 'Создание метки',

@@ -65,11 +65,8 @@ export const paths = {
 }
 
 export default (app) => {
-    app.get(main(), (_, res) => {
-        res.render('main.pug')
-    })
+    app.get(main(), (_, res) => res.render('main.pug'))
 
-    
     usersRoute(app)
     sessionRoute(app)
     statusesRoute(app)

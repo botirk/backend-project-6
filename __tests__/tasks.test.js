@@ -2,10 +2,9 @@ import { afterAll, beforeAll, expect, test } from "vitest";
 import fastify from "fastify";
 import dotenv from 'dotenv'
 import * as cheerio from "cheerio";
-import { createLabel, createStatus, login } from "./helper";
+import { createLabel, createStatus, deleteStatus, login } from "./helper";
 import server from "../server";
 import { paths } from "../server/routes";
-import { method } from "lodash";
 
 dotenv.config({ path: '.env.example' })
 
@@ -107,6 +106,12 @@ test.sequential('create task & read task & edit task & read task & delete task',
     expect(res.statusCode).toBe(302)
 
     res = await inject({ method: 'GET', url: paths.showEditDeleteTask(1) })
+    expect(res.statusCode).toBe(404)
+
+    res = await inject(deleteStatus(1))
+    expect(res.statusCode).toBe(302)
+
+    res = await inject(deleteStatus(2))
     expect(res.statusCode).toBe(302)
 
     res = await inject({ method: 'GET', url: paths.tasks() })
@@ -126,18 +131,19 @@ test.sequential('create task with label & read task with label', async() => {
     res = await inject(createLabel('label2'))
     expect(res.statusCode).toBe(302)
 
+    res = await inject(createStatus('myStatus'))
 
     res = await inject({
         method: 'POST', url: paths.tasks(),
-        payload: { data: { name: 'testTask', description: 'testDescription', statusId: '1', executorId: '1', labels: ['1', '2'] }}
+        payload: { data: { name: 'testTask', description: 'testDescription', statusId: '3', executorId: '1', labels: ['1', '2'] }}
     })
     expect(res.statusCode).toBe(302)
 
     res = await inject({ method: 'GET', url: paths.showEditDeleteTask(2) })
     expect(res.statusCode).toBe(200)
     let $ = cheerio.load(res.body)
-    expect($('*:contains("label1")')).length.greaterThanOrEqual(1)
-    expect($('*:contains("label2")')).length.greaterThanOrEqual(1)
+    expect($('div:contains("label1")')).length.greaterThanOrEqual(1)
+    expect($('div:contains("label2")')).length.greaterThanOrEqual(1)
 })
 
 test.sequential('create task with fake labels', async () => {
@@ -150,5 +156,63 @@ test.sequential('create task with fake labels', async () => {
     expect(res.statusCode).toBe(400)
 
     res = await inject({ method: 'GET', url: paths.showEditDeleteTask(3) })
+    expect(res.statusCode).toBe(404)
+})
+
+test.sequential('tasks filter', async () => {
+    const inject = await login(app)
+
+    let res = await inject(createStatus('noStatus'))
     expect(res.statusCode).toBe(302)
+
+
+    res = await inject({ method: 'GET', url: paths.tasks(), query: { status: '4' }})
+    expect(res.statusCode).toBe(200)
+    let $ = cheerio.load(res.body)
+    expect($('tr')).length(1)
+
+    res = await inject({
+        method: 'POST', url: paths.tasks(),
+        payload: { data: { name: 'testTask', description: 'testDescription', statusId: '4' }}
+    })
+    expect(res.statusCode).toBe(302)
+
+    
+    res = await inject({ method: 'GET', url: paths.tasks(), query: { status: '4' } })
+    expect(res.statusCode).toBe(200)
+    $ = cheerio.load(res.body)
+    expect($('tr')).length(2)
+
+    res = await inject({
+        method: 'POST', url: paths.tasks(),
+        payload: { data: { name: '123', description: 'testDescription', statusId: '4', labels: '1,2', executorId: '1' }}
+    })
+    expect(res.statusCode).toBe(302)
+
+    res = await inject({ method: 'GET', url: paths.tasks() })
+    expect(res.statusCode).toBe(200)
+    $ = cheerio.load(res.body)
+    expect($(`*:contains("123")`)).length.greaterThanOrEqual(1)
+
+    res = await inject({ method: 'GET', url: paths.tasks(), query: { status: '4', label: '1', executor: '1' } })
+    expect(res.statusCode).toBe(200)
+    $ = cheerio.load(res.body)
+    expect($('tr')).length(2)
+
+    const inject2 = await login(app, 'newemail')
+    res = await inject2({
+        method: 'POST', url: paths.tasks(),
+        payload: { data: { name: '123', description: 'testDescription', statusId: '4', labels: '1,2', executorId: '1' }}
+    })
+    expect(res.statusCode).toBe(302)
+
+    res = await inject({ method: 'GET', url: paths.tasks(), query: { status: '4', label: '1', executor: '1', isCreatorUser: 'yes' } })
+    expect(res.statusCode).toBe(200)
+    $ = cheerio.load(res.body)
+    expect($('tr')).length(2)
+
+    res = await inject({ method: 'GET', url: paths.tasks(), query: { status: '4', label: '1', executor: '1' } })
+    expect(res.statusCode).toBe(200)
+    $ = cheerio.load(res.body)
+    expect($('tr')).length(3)
 })

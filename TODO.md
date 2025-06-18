@@ -1,9 +1,4 @@
-GET /labels - страница со списком всех меток
-GET /labels/new - страница создания метки
-GET /labels/:id/edit - страница редактирования метки
-POST /labels - создание новой метки
-PATCH /labels/:id - обновление метки
-DELETE /labels/:id - удаление метки
+GET /tasks? - поиск по параметрам
 
 
 + GET /users - страница со списком всех пользователей
@@ -28,3 +23,9 @@ DELETE /labels/:id - удаление метки
 + GET /tasks/:id/edit - страница редактирования задачи
 + PATCH /tasks/:id - обновление задачи
 + DELETE /tasks/:id - удаление задачи
++ GET /labels - страница со списком всех меток
++ GET /labels/new - страница создания метки
++ GET /labels/:id/edit - страница редактирования метки
++ POST /labels - создание новой метки
++ PATCH /labels/:id - обновление метки
++ DELETE /labels/:id - удаление метки
