@@ -1,4 +1,10 @@
-DELETE /tasks/:id - удаление задачи
+GET /labels - страница со списком всех меток
+GET /labels/new - страница создания метки
+GET /labels/:id/edit - страница редактирования метки
+POST /labels - создание новой метки
+PATCH /labels/:id - обновление метки
+DELETE /labels/:id - удаление метки
+
 
 + GET /users - страница со списком всех пользователей
 + GET /users/new - страница регистрации
@@ -21,3 +27,4 @@ DELETE /tasks/:id - удаление задачи
 + GET /tasks/:id - страница просмотра задачи
 + GET /tasks/:id/edit - страница редактирования задачи
 + PATCH /tasks/:id - обновление задачи
++ DELETE /tasks/:id - удаление задачи

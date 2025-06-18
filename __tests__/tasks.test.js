@@ -2,7 +2,7 @@ import { afterAll, beforeAll, expect, test } from "vitest";
 import fastify from "fastify";
 import dotenv from 'dotenv'
 import * as cheerio from "cheerio";
-import { createStatus, login } from "./helper";
+import { createLabel, createStatus, login } from "./helper";
 import server from "../server";
 import { paths } from "../server/routes";
 import { method } from "lodash";
@@ -115,4 +115,40 @@ test.sequential('create task & read task & edit task & read task & delete task',
     expect($(`*:contains("testDescription")`)).length(0)
     expect($('*:contains("testTask")')).length(0)
     expect($('*:contains("testStatus")')).length(0)
+})
+
+test.sequential('create task with label & read task with label', async() => {
+    const inject = await login(app)
+
+    let res = await inject(createLabel('label1'))
+    expect(res.statusCode).toBe(302)
+
+    res = await inject(createLabel('label2'))
+    expect(res.statusCode).toBe(302)
+
+
+    res = await inject({
+        method: 'POST', url: paths.tasks(),
+        payload: { data: { name: 'testTask', description: 'testDescription', statusId: '1', executorId: '1', labels: ['1', '2'] }}
+    })
+    expect(res.statusCode).toBe(302)
+
+    res = await inject({ method: 'GET', url: paths.showEditDeleteTask(2) })
+    expect(res.statusCode).toBe(200)
+    let $ = cheerio.load(res.body)
+    expect($('*:contains("label1")')).length.greaterThanOrEqual(1)
+    expect($('*:contains("label2")')).length.greaterThanOrEqual(1)
+})
+
+test.sequential('create task with fake labels', async () => {
+    const inject = await login(app)
+
+    let res = await inject({
+        method: 'POST', url: paths.tasks(),
+        payload: { data: { name: 'fakeTask', description: 'fakeDescription', statusId: '1', executorId: '1', labels: '100,2323' }}
+    })
+    expect(res.statusCode).toBe(400)
+
+    res = await inject({ method: 'GET', url: paths.showEditDeleteTask(3) })
+    expect(res.statusCode).toBe(302)
 })

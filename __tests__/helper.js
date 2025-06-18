@@ -20,3 +20,8 @@ export const createStatus = (name = 'testStatus') => ({
     method: 'POST', url: paths.statuses(),
     payload: { data: { name }}
 })
+
+export const createLabel = (name = 'testLabel') => ({
+    method: 'POST', url: paths.labels(),
+    payload: { data: { name }}
+})

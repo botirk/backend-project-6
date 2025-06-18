@@ -21,6 +21,7 @@ export default (app) => {
                 req.flash('warning', Object.keys(e.data).map(key => `${i18next.t('layout.errorIn')} ${i18next.t(`signUp.${key}`)}`))
                 return res.render('signUp.pug', { user, errors: e.data })
             } else {
+                console.warn(e)
                 req.flash('warning', i18next.t('layout.error'))
                 return res.render('signUp.pug', { user })
             }

@@ -22,6 +22,7 @@ export default (app) => {
                 req.flash('warning', Object.keys(e.data).map(key => `${i18next.t('layout.errorIn')} ${i18next.t(`statuses.${key}`)}`))
                 return res.render('createStatus.pug', { status, errors: e.data })
             } else {
+                console.warn(e)
                 req.flash('warning', i18next.t('layout.error'))
                 return res.render('createStatus.pug', { status })
             }
@@ -58,6 +59,7 @@ export default (app) => {
                     req.flash('warning', Object.keys(e.data).map(key => `${i18next.t('layout.errorIn')} ${i18next.t(`statuses.${key}`)}`))
                     return res.render('editStatus.pug', { status, errors: e.data })
                 } else {
+                    console.warn(e)
                     req.flash('warning', i18next.t('layout.error'))
                     return res.render('editStatus.pug', { status })
                 }

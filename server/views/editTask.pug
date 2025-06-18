@@ -31,7 +31,7 @@ block content
             label.form-label(for= 'data-labels')= t('tasks.labels')
             select.form-control(id = 'data-labels', name= 'data[labels]', multiple= 'multiple')
                 each label in labels
-                    option(value= label.id)= label.name
+                    option(value= label.id, autocomplete= 'off', selected= (label.selected ? 'true' : false))= label.name
 
 
         button.btn.btn-primary(type= 'submit')= t('tasks.edit')

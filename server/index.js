@@ -35,7 +35,6 @@ const setUpViews = (app) => {
     },
     templates: path.join(__dirname, '..', 'server', 'views'),
   })
-
   app.decorateReply('render', function render(viewPath, vars) {
     return this.view(viewPath, { ...vars, flash: this.flash() ?? [] });
   })
@@ -50,6 +49,7 @@ const registerPlugins = async (app) => {
   })
 
   const knex = Knex(knexConfig[mode])
+  await knex.raw('PRAGMA foreign_keys = ON;')
   await knex.migrate.latest()
   for (const model of Object.values(models)) model.knex(knex)
   app.decorate('models', models)

@@ -1,0 +1,24 @@
+extends layout.pug 
+include mixins.pug
+
+block content 
+    h1= t('labels.labels')
+    a(href= paths.createLabel()).btn.btn-primary= t('labels.createLabel')
+
+    .table-responsive
+        table.table
+            thead 
+                tr
+                    th= t('layout.id')
+                    th= t('labels.name')
+                    th= t('layout.createDate')
+                    th= t('layout.actions')
+            tbody
+                each label in labels
+                    tr 
+                        td= label.id
+                        td= label.name
+                        td= timestamp(label.createDate)
+                        td.d-flex.flex-wrap
+                            a(href= paths.editLabel(label.id)).btn.btn-primary.me-1= t('layout.edit')
+                            +buttonTo(paths.editDeleteLabel(label.id), 'delete')(class= 'btn btn-danger', value= t('layout.delete'))

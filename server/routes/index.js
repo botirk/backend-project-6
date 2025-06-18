@@ -2,6 +2,7 @@ import usersRoute from './users.js'
 import sessionRoute from './session.js'
 import statusesRoute from './statuses.js'
 import tasksRoute from './tasks.js'
+import labelsRoute from './labels.js'
 
 const users = () => '/users/'
 
@@ -33,6 +34,14 @@ const editTask = (id) => tasks() + (id ?? ':id') + '/edit'
 
 const showEditDeleteTask = (id) => tasks() + (id ?? ':id')
 
+const labels = () => '/labels/'
+
+const createLabel = () => labels() + 'new'
+
+const editDeleteLabel = (id) => labels() + (id ?? ':id')
+
+const editLabel = (id) => labels() + (id ?? ':id') + '/edit'
+
 export const paths = {
     users,
     signUp,
@@ -49,6 +58,10 @@ export const paths = {
     createTask,
     editTask,
     showEditDeleteTask,
+    labels,
+    createLabel,
+    editDeleteLabel,
+    editLabel,
 }
 
 export default (app) => {
@@ -61,4 +74,5 @@ export default (app) => {
     sessionRoute(app)
     statusesRoute(app)
     tasksRoute(app)
+    labelsRoute(app)
 }

@@ -7,7 +7,10 @@ block content
     .shadow.mt-5.p-3
         .lead.mb-3= task.description
         hr.mb-3
-        .badge.bg-danger.text-white.mb-3= task.status.name
+        .mb-3.d-flex.flex-wrap.gap-1
+            .badge.bg-danger.text-white= task.status.name
+            each label in task.labels 
+                .badge.bg-info.text-white= label.name
         .d-flex.flex-wrap.mb-3 
             span.text-muted.me-2= t('tasks.author')
             span= task.creator.firstName + ' ' + task.creator.lastName

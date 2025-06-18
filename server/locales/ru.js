@@ -71,6 +71,18 @@ export default {
             editingTask: 'Изменение задачи',
             editSuccess: 'Задача успешно изменена',
             deleteSuccess: 'Задача успешно удалена',
-        }
+        },
+        labels: {
+            creatingLabel: 'Создание метки',
+            name: 'Наименование',
+            create: 'Создать',
+            createSuccess: 'Метка успешно создана',
+            createLabel: 'Создать метку',
+            editSuccess: 'Метка успешно изменёна',
+            deleteSuccess: 'Метка успешно удалёна',
+            editingLabel: 'Изменение метки',
+            edit: 'Изменить',
+            labels: 'Метки',
+        },
     }
 }

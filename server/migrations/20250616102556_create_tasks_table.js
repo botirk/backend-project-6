@@ -12,7 +12,7 @@ export const up = function(knex) {
     table.integer('executorId').references('id').inTable('users')
     table.timestamp('createDate').notNullable().defaultTo(knex.fn.now())
   })
-};
+}
 
 /**
  * @param { import("knex").Knex } knex
@@ -20,4 +20,4 @@ export const up = function(knex) {
  */
 export const down = function(knex) {
   return knex.schema.dropTable('tasks')
-};
+}
