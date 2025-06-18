@@ -81,7 +81,7 @@ export default async (app, _options) => {
       accessToken: process.env.ROLLBAR_TOKEN,
       captureUncaught: true,
       captureUnhandledRejections: true,
-    })
+    }).log('Server started')
   }
   
 
