@@ -10,11 +10,15 @@
    "scripts": {
       "test": "vitest run",
       "prestart": "cp node_modules/bootstrap/dist/css/bootstrap.min.css assets/bootstrap.min.css && cp node_modules/bootstrap/dist/js/bootstrap.min.js assets/bootstrap.min.js",
-      "start": "fastify start server/index.js -l debug -P -a 0.0.0.0"
+      "start": "fastify start server/index.js -l debug -P -a 0.0.0.0",
+      "lint": "eslint",
+      "lintwithinstall": "npm ci && npx eslint"
    },
    "author": "botirk",
    "license": "ISC",
    "dependencies": {
+      "@eslint/js": "^9.28.0",
+      "@stylistic/eslint-plugin": "^4.4.0",
       "@fastify/flash": "^6.0.3",
       "@fastify/formbody": "^8.0.2",
       "@fastify/passport": "^3.0.2",

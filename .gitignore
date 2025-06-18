@@ -7,3 +7,5 @@ tmp/
 temp/
 database.sqlite
 .env
+assets/bootstrap.min.js
+assets/bootstrap.min.css
