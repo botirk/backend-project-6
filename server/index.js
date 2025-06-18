@@ -83,7 +83,6 @@ export default async (app, _options) => {
       captureUnhandledRejections: true,
     }).log('Server started')
   }
-  
 
   return app;
 }
