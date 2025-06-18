@@ -2,7 +2,7 @@
    "name": "@hexlet/code",
    "version": "0.1.0",
    "type": "module",
-   "main": "./server/plugin.js",
+   "main": "./server/index.js",
    "engines": {
       "node": ">=16.x"
    },
