@@ -20,12 +20,10 @@ export default (app) => {
       res.code(400)
       req.flash('warning', i18next.t('signUp.fail'))
       if (e instanceof ValidationError) {
-        const errors = {}
-        for (const key of Object.keys(e.data)) {
-          const message = `${i18next.t('layout.errorIn')} ${i18next.t(`signUp.${key}`)}`
-          req.flash('warning', message)
-          errors[key] = message
-        }
+        const errors = Object.keys(e.data).reduce((object, key) => { 
+          object[key] = `${i18next.t('layout.errorIn')} ${i18next.t(`signUp.${key}`)}`
+          return object
+        }, {})
         return res.render('signUp.pug', { user, errors })
       }
       else {
@@ -74,13 +72,10 @@ export default (app) => {
       user.$set(req.body.data)
       res.code(400)
       if (e instanceof ValidationError) {
-        const errors = {}
-        for (const key of Object.keys(e.data)) {
-          const message = `${i18next.t('layout.errorIn')} ${i18next.t(`signUp.${key}`)}`
-          req.flash('warning', message)
-          errors[key] = message
-        }
-        console.log(errors)
+        const errors = Object.keys(e.data).reduce((object, key) => { 
+          object[key] = `${i18next.t('layout.errorIn')} ${i18next.t(`signUp.${key}`)}`
+          return object
+        }, {})
         return res.render('editUser.pug', { user: { ...req.user, ...user }, errors })
       }
       else {
