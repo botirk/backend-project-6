@@ -7,17 +7,24 @@ block content
         .mb-3
             label.form-label(for= 'data_firstName')= t('signUp.firstName')
             input.form-control(id= 'data_firstName', class= (errors.firstName ? 'is-invalid' : ''), type= 'text', placeholder= t('signUp.firstName'), name= 'data[firstName]', value= user.firstName)
+            if errors.firstName
+                .form-control-feedback.invalid-feedback= errors.firstName
 
         .mb-3
             label.form-label(for= 'data_lastName')= t('signUp.lastName')
             input.form-control(id= 'data_lastName', class= (errors.lastName ? 'is-invalid' : ''), type= 'text', placeholder= t('signUp.lastName'), name= 'data[lastName]', value= user.lastName)
-
+            if errors.lastName
+                .form-control-feedback.invalid-feedback= errors.lastName
         .mb-3
             label.form-label(for= 'data_email')= t('signUp.email')
             input.form-control(id= 'data_email', class= (errors.email ? 'is-invalid' : ''), type= 'text', placeholder= t('signUp.email'), name= 'data[email]', value= user.email)
+            if errors.email
+                .form-control-feedback.invalid-feedback= errors.email
 
         .mb-3
             label.form-label(for= 'data_password')= t('signUp.password')
             input.form-control(id= 'data_password', class= (errors.password ? 'is-invalid' : ''), type= 'password', placeholder= t('signUp.password'), name= 'data[password]', value= user.password)
+            if errors.password
+                .form-control-feedback.invalid-feedback= errors.password
 
         button.btn.btn-primary(type= 'submit')= t('layout.edit')

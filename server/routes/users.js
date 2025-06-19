@@ -20,9 +20,14 @@ export default (app) => {
       res.code(400)
       req.flash('warning', i18next.t('signUp.fail'))
       if (e instanceof ValidationError) {
-        req.flash('warning', Object.keys(e.data).map(key => `${i18next.t('layout.errorIn')} ${i18next.t(`signUp.${key}`)}`))
+        const errors = {}
+        for (const key of Object.keys(e.data)) {
+          const message = `${i18next.t('layout.errorIn')} ${i18next.t(`signUp.${key}`)}`
+          req.flash('warning', message)
+          errors.key = message
+        }
         console.log(e.data)
-        return res.render('signUp.pug', { user, errors: e.data })
+        return res.render('signUp.pug', { user, errors })
       }
       else {
         console.warn(e)
