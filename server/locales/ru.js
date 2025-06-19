@@ -54,6 +54,7 @@ export default {
       deleteSuccess: 'Статус успешно удалён',
       editingStatus: 'Изменение статуса',
       edit: 'Изменить',
+      createFail: 'Не удалось создать статус',
     },
     tasks: {
       tasks: 'Задачи',
