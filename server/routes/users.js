@@ -2,7 +2,7 @@ import i18next from 'i18next'
 import { ValidationError } from 'objection'
 import { paths } from './index.js'
 
-const userErrors = (e) => Object.keys(e.data).reduce((object, key) => { 
+const userErrors = e => Object.keys(e.data).reduce((object, key) => {
   object[key] = `${i18next.t('layout.errorIn')} ${i18next.t(`signUp.${key}`)}`
   return object
 }, {})
@@ -60,7 +60,8 @@ export default (app) => {
       await req.logOut()
       req.flash('info', i18next.t('editUser.deleted'))
       return res.redirect(paths.users())
-    } else {
+    }
+    else {
       try {
         const validUser = app.models.user.fromJson(req.body.data)
         await app.models.user.query().update(validUser).where('id', req.user.id)
@@ -80,6 +81,5 @@ export default (app) => {
         }
       }
     }
-    
   })
 }

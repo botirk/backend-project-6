@@ -3,7 +3,7 @@ import { paths } from './index.js'
 import { userGuard } from './guards.js'
 import { ValidationError } from 'objection'
 
-const statusErrors = (e) => Object.keys(e.data).reduce((object, key) => { 
+const statusErrors = e => Object.keys(e.data).reduce((object, key) => {
   object[key] = `${i18next.t('layout.errorIn')} ${i18next.t(`statuses.${key}`)}`
   return object
 }, {})
