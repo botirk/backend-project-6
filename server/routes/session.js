@@ -9,7 +9,7 @@ export default (app) => {
   app.post(paths.session(), async (req, res) => {
     if (req.user && req.body._method === 'delete') {
       await req.logOut()
-      res.flash('info', i18next.t('layout.logout'))
+      req.flash('info', i18next.t('layout.logoutSuccess'))
       return res.redirect(paths.main())
     }
     else if (req.user) {

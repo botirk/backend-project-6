@@ -16,6 +16,7 @@ export default {
       createDate: 'Дата создания',
       edit: 'Изменить',
       delete: 'Удалить',
+      logoutSuccess: 'Вы разлогинены',
     },
     signUp: {
       signUp: 'Регистрация',
