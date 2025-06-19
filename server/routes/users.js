@@ -4,7 +4,7 @@ import { paths } from './index.js'
 
 export default (app) => {
   app.get(paths.signUp(), (_, res) => {
-    res.render('signUp.pug', { errors: {} })
+    res.render('signUp.pug')
   })
 
   app.post(paths.users(), async (req, res) => {
@@ -24,14 +24,14 @@ export default (app) => {
         for (const key of Object.keys(e.data)) {
           const message = `${i18next.t('layout.errorIn')} ${i18next.t(`signUp.${key}`)}`
           req.flash('warning', message)
-          errors.key = message
+          errors[key] = message
         }
         return res.render('signUp.pug', { user, errors })
       }
       else {
         console.warn(e)
         req.flash('warning', i18next.t('layout.error'))
-        return res.render('signUp.pug', { user, errors: {} })
+        return res.render('signUp.pug', { user })
       }
     }
   })
@@ -49,7 +49,7 @@ export default (app) => {
       req.flash('danger', i18next.t('layout.401'))
       return res.redirect(paths.main())
     }
-    return res.render('editUser.pug', { user: { ...req.user, password: '' }, errors: {} })
+    return res.render('editUser.pug', { user: { ...req.user, password: '' } })
   })
 
   app.post(paths.editDeleteUser(':id'), async (req, res) => {
@@ -78,13 +78,14 @@ export default (app) => {
         for (const key of Object.keys(e.data)) {
           const message = `${i18next.t('layout.errorIn')} ${i18next.t(`signUp.${key}`)}`
           req.flash('warning', message)
-          errors.key = message
+          errors[key] = message
         }
+        console.log(errors)
         return res.render('editUser.pug', { user: { ...req.user, ...user }, errors })
       }
       else {
         req.flash('warning', i18next.t('layout.error'))
-        return res.render('editUser.pug', { user: { ...req.user, ...user }, errors: {} })
+        return res.render('editUser.pug', { user: { ...req.user, ...user } })
       }
     }
   })

@@ -33,7 +33,7 @@ const setUpViews = (app) => {
     templates: path.join(__dirname, '..', 'server', 'views'),
   })
   app.decorateReply('render', function render(viewPath, vars) {
-    return this.view(viewPath, { ...vars, flash: this.flash() ?? [] })
+    return this.view(viewPath, { errors: {}, ...vars, flash: this.flash() ?? [] })
   })
 }
 
