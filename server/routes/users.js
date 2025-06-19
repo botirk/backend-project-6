@@ -4,7 +4,7 @@ import { paths } from './index.js'
 
 export default (app) => {
   app.get(paths.signUp(), (_, res) => {
-    res.render('signUp.pug')
+    res.render('signUp.pug', { errors: {} })
   })
 
   app.post(paths.users(), async (req, res) => {
@@ -18,14 +18,16 @@ export default (app) => {
       const user = new app.models.user()
       user.$set(req.body.data)
       res.code(400)
+      req.flash('warning', i18next.t('signUp.fail'))
       if (e instanceof ValidationError) {
         req.flash('warning', Object.keys(e.data).map(key => `${i18next.t('layout.errorIn')} ${i18next.t(`signUp.${key}`)}`))
+        console.log(e.data)
         return res.render('signUp.pug', { user, errors: e.data })
       }
       else {
         console.warn(e)
         req.flash('warning', i18next.t('layout.error'))
-        return res.render('signUp.pug', { user })
+        return res.render('signUp.pug', { user, errors: {} })
       }
     }
   })
@@ -43,7 +45,7 @@ export default (app) => {
       req.flash('danger', i18next.t('layout.401'))
       return res.redirect(paths.main())
     }
-    return res.render('editUser.pug', { user: { ...req.user, password: '' } })
+    return res.render('editUser.pug', { user: { ...req.user, password: '' }, errors: {} })
   })
 
   app.post(paths.editDeleteUser(':id'), async (req, res) => {
@@ -73,7 +75,7 @@ export default (app) => {
       }
       else {
         req.flash('warning', i18next.t('layout.error'))
-        return res.render('editUser.pug', { user: { ...req.user, ...user } })
+        return res.render('editUser.pug', { user: { ...req.user, ...user }, errors: {} })
       }
     }
   })

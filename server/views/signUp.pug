@@ -6,18 +6,18 @@ block content
     form(action= paths.users(), method= 'post')
         .mb-3
             label.form-label(for= 'data-firstName')= t('signUp.firstName')
-            input.form-control(id= 'data-firstName', type= 'text', placeholder= t('signUp.firstName'), name= 'data[firstName]', value= (user || {}).firstName)
+            input.form-control(id= 'data-firstName', class= (errors.firstName ? 'is-invalid' : ''), type= 'text', placeholder= t('signUp.firstName'), name= 'data[firstName]', value= (user || {}).firstName)
         
         .mb-3
             label.form-label(for= 'data-lastName')= t('signUp.lastName')
-            input.form-control(id= 'data-lastName', type= 'text', placeholder= t('signUp.lastName'), name= 'data[lastName]', value= (user || {}).lastName)
+            input.form-control(id= 'data-lastName', class= (errors.lastName ? 'is-invalid' : ''), type= 'text', placeholder= t('signUp.lastName'), name= 'data[lastName]', value= (user || {}).lastName)
 
         .mb-3
             label.form-label(for= 'data-email')= t('signUp.email')
-            input.form-control(id= 'data-email', type= 'text', placeholder= t('signUp.email'), name= 'data[email]', value= (user || {}).email)
+            input.form-control(id= 'data-email', class= (errors.email ? 'is-invalid' : ''), type= 'text', placeholder= t('signUp.email'), name= 'data[email]', value= (user || {}).email)
 
         .mb-3
             label.form-label(for= 'data-password')= t('signUp.password')
-            input.form-control(id= 'data-password', type= 'password', placeholder= t('signUp.password'), name= 'data[password]', value= (user || {}).password)
+            input.form-control(id= 'data-password', class= (errors.password ? 'is-invalid' : ''), type= 'password', placeholder= t('signUp.password'), name= 'data[password]', value= (user || {}).password)
 
         button.btn.btn-primary(type= 'submit')= t('signUp.submit')
