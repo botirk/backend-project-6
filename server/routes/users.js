@@ -43,7 +43,7 @@ export default (app) => {
       req.flash('danger', i18next.t('layout.401'))
       return res.redirect(paths.main())
     }
-    return res.render('editUser.pug', { user: req.user })
+    return res.render('editUser.pug', { user: { ...req.user, password: '' } })
   })
 
   app.post(paths.editDeleteUser(':id'), async (req, res) => {
