@@ -2,9 +2,10 @@ extends layout.pug
 include mixins.pug
 
 block content 
-    h1= t('layout.statuses')
-    a(href= paths.createStatus()).btn.btn-primary= t('statuses.createStatus')
-
+    .d-flex.flex-wrap.justify-content-between.align-items-center.mb-3
+        h1= t('layout.statuses')
+        a(href= paths.createStatus()).btn.btn-primary= t('statuses.createStatus')
+    
     .table-responsive
         table.table
             thead 

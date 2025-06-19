@@ -2,7 +2,7 @@ extends layout.pug
 include mixins.pug
 
 block content
-    .d-flex.justify-content-between.align-items-center.mb-3
+    .d-flex.flex-wrap.justify-content-between.align-items-center.mb-3
         h1= t('tasks.tasks')
         a(href= paths.createTask()).btn.btn-primary= t('tasks.createTask')
 

@@ -2,8 +2,9 @@ extends layout.pug
 include mixins.pug
 
 block content 
-    h1= t('labels.labels')
-    a(href= paths.createLabel()).btn.btn-primary= t('labels.createLabel')
+    .d-flex.flex-wrap.justify-content-between.align-items-center.mb-3
+        h1= t('labels.labels')
+        a(href= paths.createLabel()).btn.btn-primary= t('labels.createLabel')
 
     .table-responsive
         table.table
