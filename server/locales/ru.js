@@ -87,7 +87,7 @@ export default {
       createSuccess: 'Метка успешно создана',
       createLabel: 'Создать метку',
       editSuccess: 'Метка успешно изменена',
-      deleteSuccess: 'Метка успешно удалёна',
+      deleteSuccess: 'Метка успешно удалена',
       editingLabel: 'Изменение метки',
       edit: 'Изменить',
       labels: 'Метки',
