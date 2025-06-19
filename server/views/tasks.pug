@@ -11,20 +11,20 @@ block content
             form(actions= paths.tasks(), method= 'get')
                 .row
                     .input-group.mb-3.col
-                        label(for= 'data-status').input-group-text= t('tasks.status')
-                        select.form-select.form-control(id = 'data-status', name= 'status')
+                        label(for= 'data_status').input-group-text= t('tasks.status')
+                        select.form-select.form-control(id = 'data_status', name= 'status')
                             option(autocomplete= 'off')
                             each status in statuses
                                 option(value= status.id, autocomplete= 'off' selected= (status.id == query.status))= status.name
                     .input-group.mb-3.col
-                        label(for= 'data-executor').input-group-text= t('tasks.executor')
-                        select.form-select.form-control(id = 'data-executor', name= 'executor')
+                        label(for= 'data_executor').input-group-text= t('tasks.executor')
+                        select.form-select.form-control(id = 'data_executor', name= 'executor')
                             option(autocomplete= 'off')
                             each user in users
                                 option(value= user.id, autocomplete= 'off', selected= (user.id == query.executor))= user.firstName + ' ' + user.lastName
                     .input-group.mb-3.col
-                        label(for= 'data-label').input-group-text= t('tasks.label')
-                        select.form-select.form-control(id = 'data-label', name= 'label')
+                        label(for= 'data_label').input-group-text= t('tasks.label')
+                        select.form-select.form-control(id = 'data_label', name= 'label')
                             option(autocomplete= 'off')
                             each label in labels
                                 option(value= label.id, autocomplete= 'off', selected= (label.id == query.label))= label.name
