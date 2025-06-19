@@ -4,43 +4,43 @@ import statusesRoute from './statuses.js'
 import tasksRoute from './tasks.js'
 import labelsRoute from './labels.js'
 
-const users = () => '/users/'
+const users = () => '/users'
 
-const signUp = () => users() + 'new/'
+const signUp = () => users() + '/new'
 
-const session = () => '/session/'
+const session = () => '/session'
 
-const login = () => session() + 'new/'
+const login = () => session() + '/new'
 
-const editUser = id => users() + 'edit/' + (id ?? ':id')
+const editUser = id => users() + '/edit/' + (id ?? ':id')
 
-const editDeleteUser = id => users() + (id ?? ':id')
+const editDeleteUser = id => users() + '/' + (id ?? ':id')
 
-const statuses = () => '/statuses/'
+const statuses = () => '/statuses'
 
-const createStatus = () => statuses() + 'new'
+const createStatus = () => statuses() + '/new'
 
-const editDeleteStatus = id => statuses() + (id ?? ':id')
+const editDeleteStatus = id => statuses() + '/' + (id ?? ':id')
 
-const editStatus = id => statuses() + (id ?? ':id') + '/edit'
+const editStatus = id => statuses() + '/' + (id ?? ':id') + '/edit'
 
 const main = () => '/'
 
-const tasks = () => '/tasks/'
+const tasks = () => '/tasks'
 
-const createTask = () => tasks() + 'new'
+const createTask = () => tasks() + '/new'
 
-const editTask = id => tasks() + (id ?? ':id') + '/edit'
+const editTask = id => tasks() + '/' + (id ?? ':id') + '/edit'
 
-const showEditDeleteTask = id => tasks() + (id ?? ':id')
+const showEditDeleteTask = id => tasks() + '/' + (id ?? ':id')
 
-const labels = () => '/labels/'
+const labels = () => '/labels'
 
-const createLabel = () => labels() + 'new'
+const createLabel = () => labels() + '/new'
 
-const editDeleteLabel = id => labels() + (id ?? ':id')
+const editDeleteLabel = id => labels() + '/' + (id ?? ':id')
 
-const editLabel = id => labels() + (id ?? ':id') + '/edit'
+const editLabel = id => labels() + '/' + (id ?? ':id') + '/edit'
 
 export const paths = {
   users,
