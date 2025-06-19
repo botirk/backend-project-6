@@ -14,8 +14,9 @@ const taskOptions = async (app, task = undefined, errors = undefined) => {
     statuses: await app.models.status.query().orderBy('id'),
     users: await app.models.user.query().select('id', 'firstName', 'lastName').orderBy('id'),
     labels: await app.models.label.query().orderBy('id'),
-    errors,
   }
+
+  if (errors) result.errors = errors
 
   if (task?.labels) {
     for (const label of result.labels) {
