@@ -29,9 +29,9 @@ block content
         .mb-3
             label.form-label(for= 'data_executorId')= t('tasks.executor')
             select.form-select(id = 'data_executorId', class= (errors.executorId ? 'is-invalid' : ''), name= 'data[executorId]')
-                option
+                option(autocomplete= 'off')
                 each user in users 
-                    option(value= user.id)= user.firstName + ' ' + user.lastName
+                    option(value= user.id, autocomplete= 'off', selected= (task.executorId==user.id) ? 'true' : false)= user.firstName + ' ' + user.lastName
             if errors.executorId
                 .form-control-feedback.invalid-feedback= errors.executorId
 
