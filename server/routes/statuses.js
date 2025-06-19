@@ -59,12 +59,12 @@ export default (app) => {
       catch (e) {
         const status = new app.models.status()
         status.$set(req.body.data)
+        req.flash('warning', i18next.t('statuses.editFail'))
         if (e instanceof ValidationError) {
           return res.render('editStatus.pug', { status, errors: statusErrors(e) })
         }
         else {
           console.warn(e)
-          req.flash('warning', i18next.t('layout.error'))
           return res.render('editStatus.pug', { status })
         }
       }

@@ -55,6 +55,7 @@ export default {
       editingStatus: 'Изменение статуса',
       edit: 'Изменить',
       createFail: 'Не удалось создать статус',
+      editFail: 'Не удалось изменить статус',
     },
     tasks: {
       tasks: 'Задачи',
