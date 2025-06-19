@@ -44,8 +44,7 @@ export default (app) => {
 
   app.get(paths.editStatus(':id'), userGuard(), async (req, res) => {
     const status = await app.models.status.query().findById(req.params.id)
-
-    if (!status) return res.code(400)
+    if (!status) return res.callNotFound()
     return res.render('editStatus.pug', { status })
   })
 
