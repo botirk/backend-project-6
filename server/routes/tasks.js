@@ -3,12 +3,18 @@ import { userGuard } from './guards.js'
 import { paths } from './index.js'
 import i18next from 'i18next'
 
-const taskOptions = async (app, task = undefined) => {
+const taskErrors = e => Object.keys(e.data).reduce((object, key) => {
+  object[key] = `${i18next.t('layout.errorIn')} ${i18next.t(`tasks.${key}`)}`
+  return object
+}, {})
+
+const taskOptions = async (app, task = undefined, errors = undefined) => {
   const result = {
     task,
     statuses: await app.models.status.query().orderBy('id'),
     users: await app.models.user.query().select('id', 'firstName', 'lastName').orderBy('id'),
     labels: await app.models.label.query().orderBy('id'),
+    errors,
   }
 
   if (task?.labels) {
@@ -96,13 +102,12 @@ export default (app) => {
       const task = new app.models.task()
       task.$set(req.body.data)
       res.code(400)
+      req.flash('warning', i18next.t('tasks.createFail'))
       if (e instanceof ValidationError) {
-        req.flash('warning', Object.keys(e.data).map(key => `${i18next.t('layout.errorIn')} ${i18next.t(`tasks.${key}`)}`))
-        return res.render('createTask.pug', await taskOptions(app, task))
+        return res.render('createTask.pug', await taskOptions(app, task, taskErrors(e)))
       }
       else {
         console.warn(e)
-        req.flash('warning', i18next.t('layout.error'))
         return res.render('createTask.pug', await taskOptions(app, task))
       }
     }
@@ -147,13 +152,12 @@ export default (app) => {
         const task = new app.models.task()
         task.$set(req.body.data)
         res.code(400)
+        req.flash('warning', i18next.t('tasks.editFail'))
         if (e instanceof ValidationError) {
-          req.flash('warning', Object.keys(e.data).map(key => `${i18next.t('layout.errorIn')} ${i18next.t(`tasks.${key}`)}`))
-          return res.render('editTask.pug', await taskOptions(app, task))
+          return res.render('editTask.pug', await taskOptions(app, task, taskErrors(e)))
         }
         else {
           console.warn(e)
-          req.flash('warning', i18next.t('layout.error'))
           return res.render('editTask.pug', await taskOptions(app, task))
         }
       }

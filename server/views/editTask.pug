@@ -6,32 +6,39 @@ block content
     form(action= paths.showEditDeleteTask(task.id), method= 'post')
         input(name= '_method', type= 'hidden', value= 'patch')
         .mb-3
-            label.form-label(for= 'data-name')= t('tasks.name')
-            input.form-control(id = 'data-name', type= 'text', placeholder= t('tasks.name'), name= 'data[name]', value= (task || {}).name)
+            label.form-label(for= 'data_name')= t('tasks.name')
+            input.form-control(id = 'data_name', class= (errors.name ? 'is-invalid' : ''), type= 'text', placeholder= t('tasks.name'), name= 'data[name]', value= (task || {}).name)
+            if errors.name
+                .form-control-feedback.invalid-feedback= errors.name
 
         .mb-3
-            label.form-label(for= 'data-description')= t('tasks.description')
-            textarea.form-control(id = 'data-description', name= 'data[description]')= (task || {}).description
+            label.form-label(for= 'data_description')= t('tasks.description')
+            textarea.form-control(id = 'data_description', class= (errors.description ? 'is-invalid' : ''), name= 'data[description]')= (task || {}).description
+            if errors.description
+                .form-control-feedback.invalid-feedback= errors.description
 
         .mb-3
-            label.form-label(for= 'data-statusId')= t('tasks.status')
-            select.form-select(id = 'data-statusId', name= 'data[statusId]')
+            label.form-label(for= 'data_statusId')= t('tasks.status')
+            select.form-select(id = 'data_statusId', class= (errors.statusId ? 'is-invalid' : ''), name= 'data[statusId]')
                 option(autocomplete= 'off')
                 each status in statuses 
                     option(value= status.id, autocomplete= 'off', selected= (task.statusId==status.id) ? 'true' : false)= status.name
+            if errors.statusId
+                .form-control-feedback.invalid-feedback= errors.statusId
 
         .mb-3
-            label.form-label(for= 'data-executorId')= t('tasks.executor')
-            select.form-select(id = 'data-executorId', name= 'data[executorId]')
+            label.form-label(for= 'data_executorId')= t('tasks.executor')
+            select.form-select(id = 'data_executorId', class= (errors.executorId ? 'is-invalid' : ''), name= 'data[executorId]')
                 option
                 each user in users 
                     option(value= user.id)= user.firstName + ' ' + user.lastName
+            if errors.executorId
+                .form-control-feedback.invalid-feedback= errors.executorId
 
         .mb-3
-            label.form-label(for= 'data-labels')= t('tasks.labels')
-            select.form-select(id = 'data-labels', name= 'data[labels]', multiple= 'multiple')
+            label.form-label(for= 'data_labels')= t('tasks.labels')
+            select.form-select(id = 'data_labels', name= 'data[labels]', multiple= 'multiple')
                 each label in labels
                     option(value= label.id, autocomplete= 'off', selected= (label.selected ? 'true' : false))= label.name
-
 
         button.btn.btn-primary(type= 'submit')= t('tasks.edit')

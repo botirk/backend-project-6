@@ -79,6 +79,8 @@ export default {
       onlyMyTasks: 'Только мои задачи',
       show: 'Показать',
       deleteLinkedResource: 'Удалите связаный ресурс!',
+      createFail: 'Не удалось создать задачу',
+      editFail: 'Не удалось изменить задачу',
     },
     labels: {
       creatingLabel: 'Создание метки',

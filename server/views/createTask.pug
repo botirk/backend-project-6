@@ -6,25 +6,33 @@ block content
     form(action= paths.tasks(), method= 'post')
         .mb-3
             label.form-label(for= 'data-name')= t('tasks.name')
-            input.form-control(id = 'data-name', type= 'text', placeholder= t('tasks.name'), name= 'data[name]', value= (task || {}).name)
+            input.form-control(id = 'data-name', class= (errors.name ? 'is-invalid' : ''), type= 'text', placeholder= t('tasks.name'), name= 'data[name]', value= (task || {}).name)
+            if errors.name
+                .form-control-feedback.invalid-feedback= errors.name
 
         .mb-3
             label.form-label(for= 'data-description')= t('tasks.description')
-            textarea.form-control(id = 'data-description', name= 'data[description]')= (task || {}).description
+            textarea.form-control(id = 'data-description', class= (errors.description ? 'is-invalid' : ''), name= 'data[description]')= (task || {}).description
+            if errors.description
+                .form-control-feedback.invalid-feedback= errors.description
 
         .mb-3
             label.form-label(for= 'data-statusId')= t('tasks.status')
-            select.form-select.form-control(id = 'data-statusId', name= 'data[statusId]', value= (task || {}).statusId)
+            select.form-select.form-control(id = 'data-statusId', class= (errors.statusId ? 'is-invalid' : ''), name= 'data[statusId]', value= (task || {}).statusId)
                 option(autocomplete= 'off')
                 each status in statuses 
                     option(value= status.id, autocomplete= 'off', selected= ((task || {}).statusId==status.id) ? 'true' : false)= status.name
+            if errors.statusId
+                .form-control-feedback.invalid-feedback= errors.statusId
 
         .mb-3
             label.form-label(for= 'data-executorId')= t('tasks.executor')
-            select.form-select(id = 'data-executorId', name= 'data[executorId]')
+            select.form-select(id = 'data-executorId', class= (errors.executorId ? 'is-invalid' : ''), name= 'data[executorId]')
                 option
                 each user in users 
                     option(value= user.id)= user.firstName + ' ' + user.lastName
+            if errors.executorId
+                .form-control-feedback.invalid-feedback= errors.executorId
 
         .mb-3
             label.form-label(for= 'data-labels')= t('tasks.labels')
