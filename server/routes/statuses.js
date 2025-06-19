@@ -3,6 +3,11 @@ import { paths } from './index.js'
 import { userGuard } from './guards.js'
 import { ValidationError } from 'objection'
 
+const statusErrors = (e) => Object.keys(e.data).reduce((object, key) => { 
+  object[key] = `${i18next.t('layout.errorIn')} ${i18next.t(`statuses.${key}`)}`
+  return object
+}, {})
+
 export default (app) => {
   app.get(paths.createStatus(), userGuard(), async (req, res) => {
     return res.render('createStatus.pug')
@@ -18,10 +23,8 @@ export default (app) => {
     catch (e) {
       const status = new app.models.status()
       status.$set(req.body.data)
-      res.code(400)
       if (e instanceof ValidationError) {
-        req.flash('warning', Object.keys(e.data).map(key => `${i18next.t('layout.errorIn')} ${i18next.t(`statuses.${key}`)}`))
-        return res.render('createStatus.pug', { status, errors: e.data })
+        return res.render('createStatus.pug', { status, errors: statusErrors(e) })
       }
       else {
         console.warn(e)
@@ -57,10 +60,8 @@ export default (app) => {
       catch (e) {
         const status = new app.models.status()
         status.$set(req.body.data)
-        res.code(400)
         if (e instanceof ValidationError) {
-          req.flash('warning', Object.keys(e.data).map(key => `${i18next.t('layout.errorIn')} ${i18next.t(`statuses.${key}`)}`))
-          return res.render('editStatus.pug', { status, errors: e.data })
+          return res.render('editStatus.pug', { status, errors: statusErrors(e) })
         }
         else {
           console.warn(e)

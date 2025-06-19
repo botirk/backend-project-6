@@ -6,7 +6,9 @@ block content
     form(action= paths.editDeleteStatus(status.id), method= 'post')
         input(name= '_method', type= 'hidden', value= 'patch')
         .mb-3
-            label.form-label(for= 'data-name')= t('statuses.name')
-            input.form-control(id= 'data-name', type= 'text', placeholder= t('statuses.name'), name= 'data[name]', value= status.name)
+            label.form-label(for= 'data_name')= t('statuses.name')
+            input.form-control(id= 'data_name', class= (errors.name ? 'is-invalid' : ''), type= 'text', placeholder= t('statuses.name'), name= 'data[name]', value= status.name)
+            if errors.name
+                .form-control-feedback.invalid-feedback= errors.name
 
         button.btn.btn-primary(type= 'submit')= t('statuses.edit')
