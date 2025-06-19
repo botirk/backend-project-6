@@ -2,6 +2,7 @@ import i18next from 'i18next';
 import { ValidationError } from 'objection';
 // eslint-disable-next-line
 import { paths } from './index.js';
+// eslint-disable-next-line
 import { userGuard } from './guards.js';
 
 const statusErrors = (e) => Object.keys(e.data).reduce((object, key) => {
