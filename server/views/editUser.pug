@@ -5,19 +5,19 @@ block content
 
     form(action= paths.editDeleteUser(user.id), method= 'post')
         .mb-3
-            label.form-label(for= 'data-firstName')= t('signUp.firstName')
-            input.form-control(id= 'data-firstName', type= 'text', placeholder= t('signUp.firstName'), name= 'data[firstName]', value= user.firstName)
+            label.form-label(for= 'data_firstName')= t('signUp.firstName')
+            input.form-control(id= 'data_firstName', type= 'text', placeholder= t('signUp.firstName'), name= 'data[firstName]', value= user.firstName)
         
         .mb-3
-            label.form-label(for= 'data-lastName')= t('signUp.lastName')
-            input.form-control(id= 'data-lastName', type= 'text', placeholder= t('signUp.lastName'), name= 'data[lastName]', value= user.lastName)
+            label.form-label(for= 'data_lastName')= t('signUp.lastName')
+            input.form-control(id= 'data_lastName', type= 'text', placeholder= t('signUp.lastName'), name= 'data[lastName]', value= user.lastName)
 
         .mb-3
-            label.form-label(for= 'data-email')= t('signUp.email')
-            input.form-control(id= 'data-email', type= 'text', placeholder= t('signUp.email'), name= 'data[email]', value= user.email)
+            label.form-label(for= 'data_email')= t('signUp.email')
+            input.form-control(id= 'data_email', type= 'text', placeholder= t('signUp.email'), name= 'data[email]', value= user.email)
 
         .mb-3
-            label.form-label(for= 'data-password')= t('signUp.password')
-            input.form-control(id= 'data-password', type= 'password', placeholder= t('signUp.password'), name= 'data[password]', value= user.password)
+            label.form-label(for= 'data_password')= t('signUp.password')
+            input.form-control(id= 'data_password', type= 'password', placeholder= t('signUp.password'), name= 'data[password]', value= user.password)
 
         button.btn.btn-primary(type= 'submit')= t('signUp.submit')
