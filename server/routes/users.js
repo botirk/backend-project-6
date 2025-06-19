@@ -26,7 +26,6 @@ export default (app) => {
           req.flash('warning', message)
           errors.key = message
         }
-        console.log(e.data)
         return res.render('signUp.pug', { user, errors })
       }
       else {
@@ -75,8 +74,13 @@ export default (app) => {
       user.$set(req.body.data)
       res.code(400)
       if (e instanceof ValidationError) {
-        req.flash('warning', Object.keys(e.data).map(key => `${i18next.t('layout.errorIn')} ${i18next.t(`signUp.${key}`)}`))
-        return res.render('editUser.pug', { user: { ...req.user, ...user }, errors: e.data })
+        const errors = {}
+        for (const key of Object.keys(e.data)) {
+          const message = `${i18next.t('layout.errorIn')} ${i18next.t(`signUp.${key}`)}`
+          req.flash('warning', message)
+          errors.key = message
+        }
+        return res.render('editUser.pug', { user: { ...req.user, ...user }, errors })
       }
       else {
         req.flash('warning', i18next.t('layout.error'))
