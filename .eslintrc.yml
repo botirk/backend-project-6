@@ -1,0 +1,28 @@
+---
+
+root: true
+
+parserOptions:
+  ecmaVersion: latest
+
+env:
+  node: true
+  jest: true
+  browser: true
+
+extends:
+  - "airbnb-base"
+
+rules:
+  no-console: 0
+  import/extensions: 0
+  new-cap:
+    - error
+    - properties: false
+  no-param-reassign:
+    - error
+    - props: true
+      ignorePropertyModificationsFor:
+      - req
+      - reply
+  no-underscore-dangle: [2, { "allow": ["__filename", "__dirname"] }]

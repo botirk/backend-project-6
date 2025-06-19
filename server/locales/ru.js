@@ -97,4 +97,4 @@ export default {
       createFail: 'Не удалось создать метку',
     },
   },
-}
+};

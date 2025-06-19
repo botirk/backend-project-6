@@ -1,28 +1,20 @@
-import { Strategy } from '@fastify/passport'
-import fastifySecureSession from '@fastify/secure-session'
-import fastifyPassport from '@fastify/passport'
-import { timingSafeEqual, createHash } from 'node:crypto'
-
-export const encrypt = value => createHash('sha256').update(value).digest('hex')
+import fastifyPassport, { Strategy } from '@fastify/passport';
+import fastifySecureSession from '@fastify/secure-session';
 
 class FormStrategy extends Strategy {
   constructor(name, app) {
-    super(name)
-    this.app = app
-  }
-
-  compare(passwordHash1, password2) {
-    return timingSafeEqual(Buffer.from(passwordHash1), Buffer.from(encrypt(password2)))
+    super(name);
+    this.app = app;
   }
 
   async authenticate(req) {
-    if (req.isAuthenticated()) return this.pass()
-    const email = req?.body?.data?.email
-    const password = req?.body?.data?.password
-    if (!email || !password) return this.fail()
-    const user = await this.app.models.user.query().findOne({ email, password })
-    if (user) return this.success(user)
-    return this.fail()
+    if (req.isAuthenticated()) return this.pass();
+    const email = req?.body?.data?.email;
+    const password = req?.body?.data?.password;
+    if (!email || !password) return this.fail();
+    const user = await this.app.models.user.query().findOne({ email, password });
+    if (user) return this.success(user);
+    return this.fail();
   }
 }
 
@@ -32,11 +24,11 @@ export default async (app) => {
     cookie: {
       path: '/',
     },
-  })
-  fastifyPassport.registerUserDeserializer(user => app.models.user.query().findById(user.id))
-  fastifyPassport.registerUserSerializer(user => Promise.resolve(user))
-  fastifyPassport.use(new FormStrategy('form', app))
-  await app.register(fastifyPassport.initialize())
-  await app.register(fastifyPassport.secureSession())
-  app.decorate('passport', fastifyPassport)
-}
+  });
+  fastifyPassport.registerUserDeserializer((user) => app.models.user.query().findById(user.id));
+  fastifyPassport.registerUserSerializer((user) => Promise.resolve(user));
+  fastifyPassport.use(new FormStrategy('form', app));
+  await app.register(fastifyPassport.initialize());
+  await app.register(fastifyPassport.secureSession());
+  app.decorate('passport', fastifyPassport);
+};

@@ -1,46 +1,51 @@
-import usersRoute from './users.js'
-import sessionRoute from './session.js'
-import statusesRoute from './statuses.js'
-import tasksRoute from './tasks.js'
-import labelsRoute from './labels.js'
+// eslint-disable-next-line
+import usersRoute from './users.js';
+// eslint-disable-next-line
+import sessionRoute from './session.js';
+// eslint-disable-next-line
+import statusesRoute from './statuses.js';
+// eslint-disable-next-line
+import tasksRoute from './tasks.js';
+// eslint-disable-next-line
+import labelsRoute from './labels.js';
 
-const users = () => '/users'
+const users = () => '/users';
 
-const signUp = () => users() + '/new'
+const signUp = () => `${users()}/new`;
 
-const session = () => '/session'
+const session = () => '/session';
 
-const login = () => session() + '/new'
+const login = () => `${session()}/new`;
 
-const editDeleteUser = id => users() + '/' + (id ?? ':id')
+const editDeleteUser = (id) => `${users()}/${id ?? ':id'}`;
 
-const editUser = id => editDeleteUser(id) + '/edit'
+const editUser = (id) => `${editDeleteUser(id)}/edit`;
 
-const statuses = () => '/statuses'
+const statuses = () => '/statuses';
 
-const createStatus = () => statuses() + '/new'
+const createStatus = () => `${statuses()}/new`;
 
-const editDeleteStatus = id => statuses() + '/' + (id ?? ':id')
+const editDeleteStatus = (id) => `${statuses()}/${id ?? ':id'}`;
 
-const editStatus = id => editDeleteStatus(id) + '/edit'
+const editStatus = (id) => `${editDeleteStatus(id)}/edit`;
 
-const main = () => '/'
+const main = () => '/';
 
-const tasks = () => '/tasks'
+const tasks = () => '/tasks';
 
-const createTask = () => tasks() + '/new'
+const createTask = () => `${tasks()}/new`;
 
-const editTask = id => tasks() + '/' + (id ?? ':id') + '/edit'
+const editTask = (id) => `${tasks()}/${id ?? ':id'}/edit`;
 
-const showEditDeleteTask = id => tasks() + '/' + (id ?? ':id')
+const showEditDeleteTask = (id) => `${tasks()}/${id ?? ':id'}`;
 
-const labels = () => '/labels'
+const labels = () => '/labels';
 
-const createLabel = () => labels() + '/new'
+const createLabel = () => `${labels()}/new`;
 
-const editDeleteLabel = id => labels() + '/' + (id ?? ':id')
+const editDeleteLabel = (id) => `${labels()}/${id ?? ':id'}`;
 
-const editLabel = id => labels() + '/' + (id ?? ':id') + '/edit'
+const editLabel = (id) => `${labels()}/${id ?? ':id'}/edit`;
 
 export const paths = {
   users,
@@ -62,14 +67,14 @@ export const paths = {
   createLabel,
   editDeleteLabel,
   editLabel,
-}
+};
 
 export default (app) => {
-  app.get(main(), (_, res) => res.render('main.pug'))
+  app.get(main(), (_, res) => res.render('main.pug'));
 
-  usersRoute(app)
-  sessionRoute(app)
-  statusesRoute(app)
-  tasksRoute(app)
-  labelsRoute(app)
-}
+  usersRoute(app);
+  sessionRoute(app);
+  statusesRoute(app);
+  tasksRoute(app);
+  labelsRoute(app);
+};

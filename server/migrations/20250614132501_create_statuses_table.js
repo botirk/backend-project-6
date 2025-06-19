@@ -2,18 +2,14 @@
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> }
  */
-export const up = function (knex) {
-  return knex.schema.createTable('statuses', function (table) {
-    table.increments('id')
-    table.string('name').notNullable().unique()
-    table.timestamp('createDate').notNullable().defaultTo(knex.fn.now())
-  })
-}
+export const up = (knex) => knex.schema.createTable('statuses', (table) => {
+  table.increments('id');
+  table.string('name').notNullable().unique();
+  table.timestamp('createDate').notNullable().defaultTo(knex.fn.now());
+});
 
 /**
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> }
  */
-export const down = function (knex) {
-  return knex.schema.dropTable('statuses')
-}
+export const down = (knex) => knex.schema.dropTable('statuses');

@@ -12,8 +12,8 @@
       "testci": "npm ci && npx vitest run",
       "prestart": "mkdir -p dist && cp node_modules/bootstrap/dist/css/bootstrap.min.css dist/bootstrap.min.css && cp node_modules/bootstrap/dist/js/bootstrap.min.js dist/bootstrap.min.js",
       "start": "fastify start server/index.js -l debug -P -a 0.0.0.0",
-      "lint": "eslint",
-      "lintwithinstall": "npm ci && npx eslint"
+      "lint": "eslint .",
+      "lintwithinstall": "npm ci && npx eslint ."
    },
    "author": "botirk",
    "license": "ISC",
@@ -37,10 +37,10 @@
       "sqlite3": "^5.1.7"
    },
    "devDependencies": {
-      "@eslint/js": "^9.28.0",
-      "@stylistic/eslint-plugin": "^4.4.0",
       "cheerio": "^1.1.0",
       "dotenv": "^16.5.0",
+      "eslint": "^8.22.0",
+      "eslint-config-airbnb-base": "^15.0.0",
       "vitest": "^3.2.2"
    }
 }

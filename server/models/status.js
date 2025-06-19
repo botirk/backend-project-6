@@ -1,8 +1,8 @@
-import { Model } from 'objection'
+import { Model } from 'objection';
 
 export default class Status extends Model {
   static get tableName() {
-    return 'statuses'
+    return 'statuses';
   }
 
   static get jsonSchema() {
@@ -14,6 +14,6 @@ export default class Status extends Model {
         name: { type: 'string', minLength: 1 },
         createDate: { type: 'string', format: 'date-time' },
       },
-    }
+    };
   }
 }

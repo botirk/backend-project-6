@@ -1,11 +1,11 @@
-import { Model } from 'objection'
-import Status from './status.js'
-import User from './user.js'
-import Label from './label.js'
+import { Model } from 'objection';
+import Status from './status.js';
+import User from './user.js';
+import Label from './label.js';
 
 export default class Task extends Model {
   static get tableName() {
-    return 'tasks'
+    return 'tasks';
   }
 
   static get jsonSchema() {
@@ -20,7 +20,7 @@ export default class Task extends Model {
         creatorId: { type: 'integer' },
         executorId: { type: 'integer' },
       },
-    }
+    };
   }
 
   static relationMappings = {
@@ -60,5 +60,5 @@ export default class Task extends Model {
         to: 'labels.id',
       },
     },
-  }
+  };
 }
