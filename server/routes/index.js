@@ -12,9 +12,9 @@ const session = () => '/session'
 
 const login = () => session() + '/new'
 
-const editUser = id => users() + '/edit/' + (id ?? ':id')
-
 const editDeleteUser = id => users() + '/' + (id ?? ':id')
+
+const editUser = id => editDeleteUser(id) + '/edit'
 
 const statuses = () => '/statuses'
 
@@ -22,7 +22,7 @@ const createStatus = () => statuses() + '/new'
 
 const editDeleteStatus = id => statuses() + '/' + (id ?? ':id')
 
-const editStatus = id => statuses() + '/' + (id ?? ':id') + '/edit'
+const editStatus = id => editDeleteStatus(id) + '/edit'
 
 const main = () => '/'
 
