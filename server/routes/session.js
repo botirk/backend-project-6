@@ -22,7 +22,7 @@ export default (app) => {
         try {
           if (!user) {
             req.flash('warning', i18next.t('login.error'))
-            resolve(res.code(401).render('login', { user: req.body.data }))
+            resolve(res.code(401).render('login.pug', { user: req.body.data, error: true }))
           }
           else {
             await req.logIn(user)

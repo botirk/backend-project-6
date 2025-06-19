@@ -21,14 +21,10 @@ const mode = process.env.NODE_ENV || 'development'
 
 const setUpViews = (app) => {
   app.addHook('preHandler', async (req, res) => {
-    res.locals = {
-      isAuthenticated: () => req.isAuthenticated(),
-    }
+    res.locals = { isAuthenticated: () => req.isAuthenticated() }
   })
   app.register(fastifyView, {
-    engine: {
-      pug: Pug,
-    },
+    engine: { pug: Pug },
     defaultContext: {
       paths,
       t: key => i18next.t(key),

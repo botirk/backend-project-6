@@ -6,7 +6,9 @@ block content
     form(action= paths.session(), method= 'post')
         .mb-3
             label.form-label(for= 'data-email')= t('signUp.email')
-            input.form-control(id= 'data-email', type= 'text', placeholder= t('signUp.email'), name= 'data[email]', value= (user || {}).email)
+            input.form-control(id= 'data-email', class= (error ? 'is-invalid' : ''), type= 'text', placeholder= t('signUp.email'), name= 'data[email]', value= (user || {}).email)
+            if error 
+                .form-control-feedback.invalid-feedback= t('login.error')
 
         .mb-3
             label.form-label(for= 'data-password')= t('signUp.password')
