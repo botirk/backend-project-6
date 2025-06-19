@@ -54,7 +54,7 @@ const registerPlugins = async (app) => {
   await knex.migrate.latest()
   for (const model of Object.values(models)) model.knex(knex)
   app.decorate('models', models)
-  app.decorate('objection', { models })
+  app.decorate('objection', { models, knex })
 }
 
 const setupLocalization = async () => {
