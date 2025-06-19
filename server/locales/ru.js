@@ -91,6 +91,8 @@ export default {
       editingLabel: 'Изменение метки',
       edit: 'Изменить',
       labels: 'Метки',
+      editFail: 'Не удалось изменить метку',
+      createFail: 'Не удалось создать метку',
     },
   },
 }

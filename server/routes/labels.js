@@ -3,6 +3,11 @@ import { paths } from './index.js'
 import { userGuard } from './guards.js'
 import { ForeignKeyViolationError, ValidationError } from 'objection'
 
+const labelErrors = e => Object.keys(e.data).reduce((object, key) => {
+  object[key] = `${i18next.t('layout.errorIn')} ${i18next.t(`labels.${key}`)}`
+  return object
+}, {})
+
 export default (app) => {
   app.get(paths.createLabel(), userGuard(), async (req, res) => {
     return res.render('createLabel.pug')
@@ -19,9 +24,9 @@ export default (app) => {
       const label = new app.models.label()
       label.$set(req.body.data)
       res.code(400)
+      req.flash('warning', i18next.t('labels.createFail'))
       if (e instanceof ValidationError) {
-        req.flash('warning', Object.keys(e.data).map(key => `${i18next.t('layout.errorIn')} ${i18next.t(`labels.${key}`)}`))
-        return res.render('createLabel.pug', { label, errors: e.data })
+        return res.render('createLabel.pug', { label, errors: labelErrors(e) })
       }
       else {
         console.warn(e)
@@ -60,13 +65,12 @@ export default (app) => {
         const label = new app.models.label()
         label.$set(req.body.data)
         res.code(400)
+        req.flash('warning', i18next.t('labels.editFail'))
         if (e instanceof ValidationError) {
-          req.flash('warning', Object.keys(e.data).map(key => `${i18next.t('layout.errorIn')} ${i18next.t(`labels.${key}`)}`))
-          return res.render('editLabel.pug', { label, errors: e.data })
+          return res.render('editLabel.pug', { label, errors: labelErrors(e) })
         }
         else {
           console.warn(e)
-          req.flash('warning', i18next.t('layout.error'))
           return res.render('editLabel.pug', { label })
         }
       }

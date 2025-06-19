@@ -23,6 +23,7 @@ export default (app) => {
     catch (e) {
       const status = new app.models.status()
       status.$set(req.body.data)
+      res.code(400)
       req.flash('warning', i18next.t('statuses.createFail'))
       if (e instanceof ValidationError) {
         return res.render('createStatus.pug', { status, errors: statusErrors(e) })
@@ -59,6 +60,7 @@ export default (app) => {
       catch (e) {
         const status = new app.models.status()
         status.$set(req.body.data)
+        res.code(400)
         req.flash('warning', i18next.t('statuses.editFail'))
         if (e instanceof ValidationError) {
           return res.render('editStatus.pug', { status, errors: statusErrors(e) })
