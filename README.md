@@ -1,3 +1,6 @@
+### Description
+Mini-jira educational ticket system for tasks for hexlet.io. To view all features register first.
+
 ### Test live (wait 60 seconds for server to start):
 [Link](https://backend-project-6-a2us.onrender.com/) 
 
