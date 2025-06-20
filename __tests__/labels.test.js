@@ -35,6 +35,13 @@ test.sequential('create label & get label & patch label & delete label', async (
   res = await inject({
     method: 'POST',
     url: paths.labels(),
+    payload: { data: { name: '' } },
+  });
+  expect(res.statusCode).toBe(400);
+
+  res = await inject({
+    method: 'POST',
+    url: paths.labels(),
     payload: { data: { name: 'testLabelName' } },
   });
   expect(res.statusCode).toBe(302);

@@ -35,6 +35,13 @@ test.sequential('create status & get status & patch status & delete status', asy
   res = await inject({
     method: 'POST',
     url: paths.statuses(),
+    payload: { data: { name: '' } },
+  });
+  expect(res.statusCode).toBe(400);
+
+  res = await inject({
+    method: 'POST',
+    url: paths.statuses(),
     payload: { data: { name: 'testStatusName' } },
   });
   expect(res.statusCode).toBe(302);
