@@ -28,9 +28,7 @@ export default (app) => {
       if (e instanceof ValidationError) {
         return res.render('createLabel.pug', { label, errors: labelErrors(e) });
       }
-
       console.warn(e);
-      req.flash('warning', i18next.t('layout.error'));
       return res.render('createLabel.pug', { label });
     }
   });

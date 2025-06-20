@@ -28,7 +28,6 @@ export default (app) => {
       if (e instanceof ValidationError) {
         return res.render('createStatus.pug', { status, errors: statusErrors(e) });
       }
-
       console.warn(e);
       return res.render('createStatus.pug', { status });
     }

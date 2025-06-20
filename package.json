@@ -9,7 +9,7 @@
    "scripts": {
       "build": "npm run prestart",
       "test": "vitest run",
-      "testci": "npm ci && npx vitest run",
+      "testci": "npm ci && npx vitest run --coverage",
       "prestart": "mkdir -p dist && cp node_modules/bootstrap/dist/css/bootstrap.min.css dist/bootstrap.min.css && cp node_modules/bootstrap/dist/js/bootstrap.min.js dist/bootstrap.min.js",
       "start": "fastify start server/index.js -l debug -P -a 0.0.0.0",
       "lint": "eslint .",
@@ -37,6 +37,7 @@
       "sqlite3": "^5.1.7"
    },
    "devDependencies": {
+      "@vitest/coverage-v8": "^3.2.2",
       "cheerio": "^1.1.0",
       "dotenv": "^16.5.0",
       "eslint": "^8.22.0",
