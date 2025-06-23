@@ -1,21 +1,24 @@
 import i18next from 'i18next';
-// eslint-disable-next-line
-import { paths } from './index.js';
+import { mainPaths } from './main.js';
+
+const session = () => '/session';
+const login = () => `${session()}/new`;
+export const sessionPaths = { session, login };
 
 export default (app) => {
-  app.get(paths.login(), (_, res) => {
+  app.get(sessionPaths.login(), (_, res) => {
     res.render('login.pug');
   });
 
-  app.post(paths.session(), async (req, res) => {
+  app.post(sessionPaths.session(), async (req, res) => {
     // eslint-disable-next-line
     if (req.user && req.body._method === 'delete') {
       await req.logOut();
       req.flash('info', i18next.t('layout.logoutSuccess'));
-      return res.redirect(paths.main());
+      return res.redirect(mainPaths.main());
     }
     if (req.user) {
-      return res.redirect(paths.main());
+      return res.redirect(mainPaths.main());
     }
 
     // eslint-disable-next-line
@@ -28,7 +31,7 @@ export default (app) => {
           } else {
             await req.logIn(user);
             req.flash('success', i18next.t('login.success'));
-            resolve(res.redirect(paths.main()));
+            resolve(res.redirect(mainPaths.main()));
           }
         } catch (e) {
           reject(e);

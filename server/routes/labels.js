@@ -1,9 +1,13 @@
 import i18next from 'i18next';
 import { ForeignKeyViolationError, ValidationError } from 'objection';
-// eslint-disable-next-line
-import { paths } from './index.js';
-// eslint-disable-next-line
 import { userGuard } from './guards.js';
+
+export const labelsPaths = {
+  labels: () => '/labels',
+  createLabel: () => `${labelsPaths.labels()}/new`,
+  editDeleteLabel: (id) => `${labelsPaths.labels()}/${id ?? ':id'}`,
+  editLabel: (id) => `${labelsPaths.labels()}/${id ?? ':id'}/edit`,
+};
 
 const labelErrors = (e) => Object.keys(e.data).reduce((object, key) => {
   // eslint-disable-next-line
@@ -12,14 +16,14 @@ const labelErrors = (e) => Object.keys(e.data).reduce((object, key) => {
 }, {});
 
 export default (app) => {
-  app.get(paths.createLabel(), userGuard(), async (req, res) => res.render('createLabel.pug'));
+  app.get(labelsPaths.createLabel(), userGuard(), async (req, res) => res.render('createLabel.pug'));
 
-  app.post(paths.labels(), userGuard(), async (req, res) => {
+  app.post(labelsPaths.labels(), userGuard(), async (req, res) => {
     try {
       const validLabel = app.models.label.fromJson(req.body.data);
       await app.models.label.query().insert(validLabel);
       req.flash('success', i18next.t('labels.createSuccess'));
-      return res.redirect(paths.labels());
+      return res.redirect(labelsPaths.labels());
     } catch (e) {
       const label = new app.models.label();
       label.$set(req.body.data);
@@ -33,7 +37,7 @@ export default (app) => {
     }
   });
 
-  app.get(paths.labels(), userGuard(), async (_, res) => {
+  app.get(labelsPaths.labels(), userGuard(), async (_, res) => {
     const labels = await app.models.label.query()
       .select('id', 'name', 'createDate')
       .orderBy('id');
@@ -41,23 +45,23 @@ export default (app) => {
     return res.render('labels.pug', { labels });
   });
 
-  app.get(paths.editLabel(':id'), userGuard(), async (req, res) => {
+  app.get(labelsPaths.editLabel(':id'), userGuard(), async (req, res) => {
     const label = await app.models.label.query().findById(req.params.id);
     if (!label) {
       req.flash('warning', i18next.t('layout.404'));
-      return res.redirect(paths.labels());
+      return res.redirect(labelsPaths.labels());
     }
     return res.render('editLabel.pug', { label });
   });
 
-  app.post(paths.editDeleteLabel(':id'), userGuard(), async (req, res) => {
+  app.post(labelsPaths.editDeleteLabel(':id'), userGuard(), async (req, res) => {
     // eslint-disable-next-line
     if (req.body._method === 'patch') {
       try {
         const validLabel = app.models.label.fromJson(req.body.data);
         await app.models.label.query().update(validLabel).where('id', req.params.id);
         req.flash('success', i18next.t('labels.editSuccess'));
-        return res.redirect(paths.labels());
+        return res.redirect(labelsPaths.labels());
       } catch (e) {
         const label = new app.models.label();
         label.$set(req.body.data);
@@ -75,12 +79,12 @@ export default (app) => {
       try {
         await app.models.label.query().deleteById(req.params.id);
         req.flash('info', i18next.t('labels.deleteSuccess'));
-        return res.redirect(paths.labels());
+        return res.redirect(labelsPaths.labels());
       } catch (e) {
         console.warn(e);
         if (e instanceof ForeignKeyViolationError) {
           req.flash('warning', i18next.t('tasks.deleteLinkedResource'));
-          return res.redirect(paths.labels());
+          return res.redirect(labelsPaths.labels());
         }
 
         return res.callNotFound();

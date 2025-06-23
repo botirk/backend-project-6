@@ -1,4 +1,4 @@
-import { paths } from '../server/routes';
+import paths from '../server/routes/paths.js';
 
 export const login = async (app, email = 'testEmail') => {
   await app.inject({

@@ -1,9 +1,13 @@
 import { ForeignKeyViolationError, ValidationError } from 'objection';
 import i18next from 'i18next';
-// eslint-disable-next-line
 import { userGuard } from './guards.js';
-// eslint-disable-next-line
-import { paths } from './index.js';
+
+export const tasksPaths = {
+  tasks: () => '/tasks',
+  createTask: () => `${tasksPaths.tasks()}/new`,
+  editTask: (id) => `${tasksPaths.tasks()}/${id ?? ':id'}/edit`,
+  showEditDeleteTask: (id) => `${tasksPaths.tasks()}/${id ?? ':id'}`,
+};
 
 const taskErrors = (e) => Object.keys(e.data).reduce((object, key) => {
   // eslint-disable-next-line
@@ -92,9 +96,9 @@ const fixTask = (req) => {
 };
 
 export default (app) => {
-  app.get(paths.createTask(), userGuard(), async (_, res) => res.render('createTask.pug', await taskOptions(app)));
+  app.get(tasksPaths.createTask(), userGuard(), async (_, res) => res.render('createTask.pug', await taskOptions(app)));
 
-  app.post(paths.tasks(), userGuard(), async (req, res) => {
+  app.post(tasksPaths.tasks(), userGuard(), async (req, res) => {
     try {
       fixTask(req);
       const validTask = app.models.task.fromJson(req.body.data);
@@ -104,7 +108,7 @@ export default (app) => {
         for (const label of req.body.data.labels) await task.$relatedQuery('labels', trx).relate(label);
       });
       req.flash('success', i18next.t('tasks.createSuccess'));
-      return res.redirect(paths.tasks());
+      return res.redirect(tasksPaths.tasks());
     } catch (e) {
       const task = new app.models.task();
       task.$set(req.body.data);
@@ -119,24 +123,24 @@ export default (app) => {
     }
   });
 
-  app.get(paths.tasks(), userGuard(), async (req, res) => res.render('tasks.pug', await tasksOptions(app, req)));
+  app.get(tasksPaths.tasks(), userGuard(), async (req, res) => res.render('tasks.pug', await tasksOptions(app, req)));
 
-  app.get(paths.showEditDeleteTask(':id'), userGuard(), async (req, res) => {
+  app.get(tasksPaths.showEditDeleteTask(':id'), userGuard(), async (req, res) => {
     const task = await getTask(app, req.params.id);
     if (!task) return res.callNotFound();
     return res.render('task.pug', { task });
   });
 
-  app.get(paths.editTask(':id'), userGuard(), async (req, res) => {
+  app.get(tasksPaths.editTask(':id'), userGuard(), async (req, res) => {
     const task = await getTask(app, req.params.id);
     if (!task) {
       req.flash('warning', i18next.t('layout.404'));
-      return res.redirect(paths.tasks());
+      return res.redirect(tasksPaths.tasks());
     }
     return res.render('editTask.pug', await taskOptions(app, task));
   });
 
-  app.post(paths.showEditDeleteTask(':id'), userGuard(), async (req, res) => {
+  app.post(tasksPaths.showEditDeleteTask(':id'), userGuard(), async (req, res) => {
     if (!(await app.models.task.query().findById(req.params.id))) {
       return res.callNotFound();
     }
@@ -152,7 +156,7 @@ export default (app) => {
           for (const label of req.body.data.labels) await app.models.task.relatedQuery('labels', trx).for(req.params.id).relate(label);
         });
         req.flash('success', i18next.t('tasks.editSuccess'));
-        return res.redirect(paths.tasks());
+        return res.redirect(tasksPaths.tasks());
       } catch (e) {
         const task = new app.models.task();
         task.$set(req.body.data);
@@ -173,12 +177,12 @@ export default (app) => {
           await app.models.task.query(trx).deleteById(req.params.id);
         });
         req.flash('info', i18next.t('tasks.deleteSuccess'));
-        return res.redirect(paths.tasks());
+        return res.redirect(tasksPaths.tasks());
       } catch (e) {
         console.warn(e);
         if (e instanceof ForeignKeyViolationError) {
           req.flash('warning', i18next.t('tasks.deleteLinkedResource'));
-          return res.redirect(paths.tasks());
+          return res.redirect(tasksPaths.tasks());
         }
 
         return res.callNotFound();

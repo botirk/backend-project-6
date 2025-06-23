@@ -8,7 +8,7 @@ import {
   createLabel, createStatus, deleteStatus, login,
 } from './helper';
 import server from '../server';
-import { paths } from '../server/routes';
+import paths from '../server/routes/paths.js';
 
 dotenv.config({ path: '.env.example' });
 

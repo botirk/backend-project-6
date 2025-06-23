@@ -1,9 +1,13 @@
 import i18next from 'i18next';
 import { ValidationError } from 'objection';
-// eslint-disable-next-line
-import { paths } from './index.js';
-// eslint-disable-next-line
 import { userGuard } from './guards.js';
+
+export const statusesPaths = {
+  statuses: () => '/statuses',
+  createStatus: () => `${statusesPaths.statuses()}/new`,
+  editDeleteStatus: (id) => `${statusesPaths.statuses()}/${id ?? ':id'}`,
+  editStatus: (id) => `${statusesPaths.editDeleteStatus(id)}/edit`,
+};
 
 const statusErrors = (e) => Object.keys(e.data).reduce((object, key) => {
   // eslint-disable-next-line
@@ -12,14 +16,14 @@ const statusErrors = (e) => Object.keys(e.data).reduce((object, key) => {
 }, {});
 
 export default (app) => {
-  app.get(paths.createStatus(), userGuard(), async (req, res) => res.render('createStatus.pug'));
+  app.get(statusesPaths.createStatus(), userGuard(), async (req, res) => res.render('createStatus.pug'));
 
-  app.post(paths.statuses(), userGuard(), async (req, res) => {
+  app.post(statusesPaths.statuses(), userGuard(), async (req, res) => {
     try {
       const validStatus = app.models.status.fromJson(req.body.data);
       await app.models.status.query().insert(validStatus);
       req.flash('success', i18next.t('statuses.createSuccess'));
-      return res.redirect(paths.statuses());
+      return res.redirect(statusesPaths.statuses());
     } catch (e) {
       const status = new app.models.status();
       status.$set(req.body.data);
@@ -33,7 +37,7 @@ export default (app) => {
     }
   });
 
-  app.get(paths.statuses(), userGuard(), async (_, res) => {
+  app.get(statusesPaths.statuses(), userGuard(), async (_, res) => {
     const statuses = await app.models.status.query()
       .select('id', 'name', 'createDate')
       .orderBy('id');
@@ -41,20 +45,20 @@ export default (app) => {
     return res.render('statuses.pug', { statuses });
   });
 
-  app.get(paths.editStatus(':id'), userGuard(), async (req, res) => {
+  app.get(statusesPaths.editStatus(':id'), userGuard(), async (req, res) => {
     const status = await app.models.status.query().findById(req.params.id);
     if (!status) return res.callNotFound();
     return res.render('editStatus.pug', { status });
   });
 
-  app.post(paths.editDeleteStatus(':id'), userGuard(), async (req, res) => {
+  app.post(statusesPaths.editDeleteStatus(':id'), userGuard(), async (req, res) => {
     // eslint-disable-next-line
     if (req.body._method === 'patch') {
       try {
         const validStatus = app.models.status.fromJson(req.body.data);
         await app.models.status.query().update(validStatus).where('id', req.params.id);
         req.flash('success', i18next.t('statuses.editSuccess'));
-        return res.redirect(paths.statuses());
+        return res.redirect(statusesPaths.statuses());
       } catch (e) {
         const status = new app.models.status();
         status.$set(req.body.data);
@@ -67,12 +71,12 @@ export default (app) => {
         console.warn(e);
         return res.render('editStatus.pug', { status });
       }
-    // eslint-disable-next-line
+      // eslint-disable-next-line
     } else if (req.body._method === 'delete') {
       try {
         await app.models.status.query().deleteById(req.params.id);
         req.flash('info', i18next.t('statuses.deleteSuccess'));
-        return res.redirect(paths.statuses());
+        return res.redirect(statusesPaths.statuses());
       } catch {
         return res.callNotFound();
       }

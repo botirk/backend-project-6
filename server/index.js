@@ -11,7 +11,8 @@ import Knex from 'knex';
 import Rollbar from 'rollbar';
 import models from './models/index.js';
 import ru from './locales/ru.js';
-import addRoutes, { paths } from './routes/index.js';
+import addRoutes from './routes/index.js';
+import paths from './routes/paths.js';
 import * as knexConfig from '../knexfile.js';
 import addAuth from './auth.js';
 

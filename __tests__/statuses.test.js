@@ -6,7 +6,7 @@ import dotenv from 'dotenv';
 import * as cheerio from 'cheerio';
 import { login } from './helper';
 import server from '../server';
-import { paths } from '../server/routes';
+import paths from '../server/routes/paths.js';
 
 dotenv.config({ path: '.env.example' });
 

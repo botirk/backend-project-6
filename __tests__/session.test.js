@@ -5,7 +5,7 @@ import fastify from 'fastify';
 import dotenv from 'dotenv';
 import * as cheerio from 'cheerio';
 import server from '../server/index.js';
-import { paths } from '../server/routes';
+import paths from '../server/routes/paths.js';
 import { login } from './helper.js';
 
 dotenv.config({ path: '.env.example' });
