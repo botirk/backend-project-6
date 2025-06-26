@@ -85,6 +85,7 @@ test.sequential('post user & edit user', async () => {
     method: 'POST',
     url: paths.editDeleteUser(1),
     payload: {
+      _method: 'patch',
       data: {
         firstName: 'changedUser', lastName: 'changedUser', email: 'changedEmail', password: 'changedUser',
       },
@@ -103,6 +104,7 @@ test.sequential('post user & edit user', async () => {
     method: 'POST',
     url: paths.editDeleteUser(2),
     payload: {
+      _method: 'patch',
       data: {
         firstName: 'changedUser', lastName: 'changedUser', email: 'changedEmail', password: 'changedUser',
       },

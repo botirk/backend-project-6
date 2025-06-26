@@ -9,11 +9,7 @@ export const tasksPaths = {
   showEditDeleteTask: (id) => `${tasksPaths.tasks()}/${id ?? ':id'}`,
 };
 
-const taskErrors = (e) => Object.keys(e.data).reduce((object, key) => {
-  // eslint-disable-next-line
-  object[key] = `${i18next.t('layout.errorIn')} ${i18next.t(`tasks.${key}`)}`;
-  return object;
-}, {});
+const taskErrors = (e) => Object.keys(e.data).reduce((object, key) => ({ ...object, key: `${i18next.t('layout.errorIn')} ${i18next.t(`tasks.${key}`)}` }), {});
 
 const taskOptions = async (app, task = undefined, errors = undefined) => {
   const result = {
@@ -26,7 +22,7 @@ const taskOptions = async (app, task = undefined, errors = undefined) => {
   if (errors) result.errors = errors;
 
   if (task?.labels) {
-    // eslint-disable-next-line
+    // eslint-disable-next-line no-restricted-syntax -- iterating is okay
     for (const label of result.labels) {
       if (task.labels.some((taskLabel) => taskLabel.id === label.id)) {
         label.selected = true;
@@ -104,7 +100,7 @@ export default (app) => {
       const validTask = app.models.task.fromJson(req.body.data);
       await app.models.task.transaction(async (trx) => {
         const task = await app.models.task.query(trx).insert(validTask);
-        // eslint-disable-next-line
+        // eslint-disable-next-line no-restricted-syntax,no-await-in-loop -- iterating is okay
         for (const label of req.body.data.labels) await task.$relatedQuery('labels', trx).relate(label);
       });
       req.flash('success', i18next.t('tasks.createSuccess'));
@@ -140,54 +136,51 @@ export default (app) => {
     return res.render('editTask.pug', await taskOptions(app, task));
   });
 
-  app.post(tasksPaths.showEditDeleteTask(':id'), userGuard(), async (req, res) => {
-    if (!(await app.models.task.query().findById(req.params.id))) {
-      return res.callNotFound();
+  app.patch(tasksPaths.showEditDeleteTask(':id'), userGuard(), async (req, res) => {
+    if (!(await app.models.task.query().findById(req.params.id))) return res.callNotFound();
+
+    fixTask(req);
+    try {
+      const validTask = app.models.task.fromJson(req.body.data);
+      await app.models.task.transaction(async (trx) => {
+        await app.models.taskLabel.query(trx).delete().where('taskId', req.params.id);
+        await app.models.task.query(trx).findById(req.params.id).patch(validTask);
+        // eslint-disable-next-line no-restricted-syntax,no-await-in-loop -- iterating is okay
+        for (const label of req.body.data.labels) await app.models.task.relatedQuery('labels', trx).for(req.params.id).relate(label);
+      });
+      req.flash('success', i18next.t('tasks.editSuccess'));
+      return res.redirect(tasksPaths.tasks());
+    } catch (e) {
+      const task = new app.models.task();
+      task.$set(req.body.data);
+      res.code(400);
+      req.flash('warning', i18next.t('tasks.editFail'));
+      if (e instanceof ValidationError) {
+        return res.render('editTask.pug', await taskOptions(app, task, taskErrors(e)));
+      }
+
+      console.warn(e);
+      return res.render('editTask.pug', await taskOptions(app, task));
     }
-    // eslint-disable-next-line
-    if (req.body._method === 'patch') {
-      fixTask(req);
-      try {
-        const validTask = app.models.task.fromJson(req.body.data);
-        await app.models.task.transaction(async (trx) => {
-          await app.models.taskLabel.query(trx).delete().where('taskId', req.params.id);
-          await app.models.task.query(trx).findById(req.params.id).patch(validTask);
-          // eslint-disable-next-line
-          for (const label of req.body.data.labels) await app.models.task.relatedQuery('labels', trx).for(req.params.id).relate(label);
-        });
-        req.flash('success', i18next.t('tasks.editSuccess'));
-        return res.redirect(tasksPaths.tasks());
-      } catch (e) {
-        const task = new app.models.task();
-        task.$set(req.body.data);
-        res.code(400);
-        req.flash('warning', i18next.t('tasks.editFail'));
-        if (e instanceof ValidationError) {
-          return res.render('editTask.pug', await taskOptions(app, task, taskErrors(e)));
-        }
+  });
 
-        console.warn(e);
-        return res.render('editTask.pug', await taskOptions(app, task));
-      }
-    // eslint-disable-next-line
-    } else if (req.body._method === 'delete') {
-      try {
-        await app.models.task.transaction(async (trx) => {
-          await app.models.taskLabel.query(trx).delete().where('taskId', req.params.id);
-          await app.models.task.query(trx).deleteById(req.params.id);
-        });
-        req.flash('info', i18next.t('tasks.deleteSuccess'));
-        return res.redirect(tasksPaths.tasks());
-      } catch (e) {
-        console.warn(e);
-        if (e instanceof ForeignKeyViolationError) {
-          req.flash('warning', i18next.t('tasks.deleteLinkedResource'));
-          return res.redirect(tasksPaths.tasks());
-        }
+  app.delete(tasksPaths.showEditDeleteTask(':id'), userGuard(), async (req, res) => {
+    if (!(await app.models.task.query().findById(req.params.id))) return res.callNotFound();
 
-        return res.callNotFound();
+    try {
+      await app.models.task.transaction(async (trx) => {
+        await app.models.taskLabel.query(trx).delete().where('taskId', req.params.id);
+        await app.models.task.query(trx).deleteById(req.params.id);
+      });
+      req.flash('info', i18next.t('tasks.deleteSuccess'));
+      return res.redirect(tasksPaths.tasks());
+    } catch (e) {
+      console.warn(e);
+      if (e instanceof ForeignKeyViolationError) {
+        req.flash('warning', i18next.t('tasks.deleteLinkedResource'));
+        return res.redirect(tasksPaths.tasks());
       }
-    } else {
+
       return res.callNotFound();
     }
   });

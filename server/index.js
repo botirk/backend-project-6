@@ -4,10 +4,11 @@ import fastifyStatic from '@fastify/static';
 import fastifyView from '@fastify/view';
 import fastifyFormbody from '@fastify/formbody';
 import fastifySensible from '@fastify/sensible';
+import fastifyMethodOverride from 'fastify-method-override';
 import qs from 'qs';
 import Pug from 'pug';
 import i18next from 'i18next';
-import Knex from 'knex';
+import knexConstructor from 'knex';
 import Rollbar from 'rollbar';
 import models from './models/index.js';
 import ru from './locales/ru.js';
@@ -21,7 +22,7 @@ const mode = process.env.NODE_ENV || 'development';
 
 const setUpViews = (app) => {
   app.addHook('preHandler', async (req, res) => {
-    // eslint-disable-next-line
+    // eslint-disable-next-line no-param-reassign -- need to rewrite response
     res.locals = { isAuthenticated: () => req.isAuthenticated() };
   });
   app.register(fastifyView, {
@@ -39,6 +40,7 @@ const setUpViews = (app) => {
 };
 
 const registerPlugins = async (app) => {
+  await app.register(fastifyMethodOverride);
   await app.register(fastifySensible);
   await app.register(fastifyFormbody, { parser: qs.parse });
   await app.register(fastifyStatic, {
@@ -46,11 +48,10 @@ const registerPlugins = async (app) => {
     prefix: '/dist/',
   });
 
-  // eslint-disable-next-line
-  const knex = Knex(knexConfig[mode]);
+  const knex = knexConstructor(knexConfig[mode]);
   if (mode !== 'production') await knex.raw('PRAGMA foreign_keys = ON;');
   await knex.migrate.latest();
-  // eslint-disable-next-line
+  // eslint-disable-next-line no-restricted-syntax -- iterating is okay
   for (const model of Object.values(models)) model.knex(knex);
   app.decorate('models', models);
   app.decorate('objection', { models, knex });
@@ -66,8 +67,8 @@ const setupLocalization = async () => {
     });
 };
 
-// eslint-disable-next-line
-export default async (app, _options) => {
+// eslint-disable-next-line no-unused-vars -- this param is used by fastify
+export default async (app, _) => {
   await addAuth(app);
   await registerPlugins(app);
 

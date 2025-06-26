@@ -9,11 +9,7 @@ export const statusesPaths = {
   editStatus: (id) => `${statusesPaths.editDeleteStatus(id)}/edit`,
 };
 
-const statusErrors = (e) => Object.keys(e.data).reduce((object, key) => {
-  // eslint-disable-next-line
-  object[key] = `${i18next.t('layout.errorIn')} ${i18next.t(`statuses.${key}`)}`
-  return object;
-}, {});
+const statusErrors = (e) => Object.keys(e.data).reduce((object, key) => ({ ...object, key: `${i18next.t('layout.errorIn')} ${i18next.t(`statuses.${key}`)}` }), {});
 
 export default (app) => {
   app.get(statusesPaths.createStatus(), userGuard(), async (req, res) => res.render('createStatus.pug'));
@@ -51,36 +47,32 @@ export default (app) => {
     return res.render('editStatus.pug', { status });
   });
 
-  app.post(statusesPaths.editDeleteStatus(':id'), userGuard(), async (req, res) => {
-    // eslint-disable-next-line
-    if (req.body._method === 'patch') {
-      try {
-        const validStatus = app.models.status.fromJson(req.body.data);
-        await app.models.status.query().update(validStatus).where('id', req.params.id);
-        req.flash('success', i18next.t('statuses.editSuccess'));
-        return res.redirect(statusesPaths.statuses());
-      } catch (e) {
-        const status = new app.models.status();
-        status.$set(req.body.data);
-        res.code(400);
-        req.flash('warning', i18next.t('statuses.editFail'));
-        if (e instanceof ValidationError) {
-          return res.render('editStatus.pug', { status, errors: statusErrors(e) });
-        }
+  app.patch(statusesPaths.editDeleteStatus(':id'), userGuard(), async (req, res) => {
+    try {
+      const validStatus = app.models.status.fromJson(req.body.data);
+      await app.models.status.query().update(validStatus).where('id', req.params.id);
+      req.flash('success', i18next.t('statuses.editSuccess'));
+      return res.redirect(statusesPaths.statuses());
+    } catch (e) {
+      const status = new app.models.status();
+      status.$set(req.body.data);
+      res.code(400);
+      req.flash('warning', i18next.t('statuses.editFail'));
+      if (e instanceof ValidationError) {
+        return res.render('editStatus.pug', { status, errors: statusErrors(e) });
+      }
 
-        console.warn(e);
-        return res.render('editStatus.pug', { status });
-      }
-      // eslint-disable-next-line
-    } else if (req.body._method === 'delete') {
-      try {
-        await app.models.status.query().deleteById(req.params.id);
-        req.flash('info', i18next.t('statuses.deleteSuccess'));
-        return res.redirect(statusesPaths.statuses());
-      } catch {
-        return res.callNotFound();
-      }
-    } else {
+      console.warn(e);
+      return res.render('editStatus.pug', { status });
+    }
+  });
+
+  app.delete(statusesPaths.editDeleteStatus(':id'), userGuard(), async (req, res) => {
+    try {
+      await app.models.status.query().deleteById(req.params.id);
+      req.flash('info', i18next.t('statuses.deleteSuccess'));
+      return res.redirect(statusesPaths.statuses());
+    } catch {
       return res.callNotFound();
     }
   });

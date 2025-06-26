@@ -9,11 +9,7 @@ export const labelsPaths = {
   editLabel: (id) => `${labelsPaths.labels()}/${id ?? ':id'}/edit`,
 };
 
-const labelErrors = (e) => Object.keys(e.data).reduce((object, key) => {
-  // eslint-disable-next-line
-  object[key] = `${i18next.t('layout.errorIn')} ${i18next.t(`labels.${key}`)}`
-  return object;
-}, {});
+const labelErrors = (e) => Object.keys(e.data).reduce((object, key) => ({ ...object, key: `${i18next.t('layout.errorIn')} ${i18next.t(`labels.${key}`)}` }), {});
 
 export default (app) => {
   app.get(labelsPaths.createLabel(), userGuard(), async (req, res) => res.render('createLabel.pug'));
@@ -54,42 +50,38 @@ export default (app) => {
     return res.render('editLabel.pug', { label });
   });
 
-  app.post(labelsPaths.editDeleteLabel(':id'), userGuard(), async (req, res) => {
-    // eslint-disable-next-line
-    if (req.body._method === 'patch') {
-      try {
-        const validLabel = app.models.label.fromJson(req.body.data);
-        await app.models.label.query().update(validLabel).where('id', req.params.id);
-        req.flash('success', i18next.t('labels.editSuccess'));
-        return res.redirect(labelsPaths.labels());
-      } catch (e) {
-        const label = new app.models.label();
-        label.$set(req.body.data);
-        res.code(400);
-        req.flash('warning', i18next.t('labels.editFail'));
-        if (e instanceof ValidationError) {
-          return res.render('editLabel.pug', { label, errors: labelErrors(e) });
-        }
-
-        console.warn(e);
-        return res.render('editLabel.pug', { label });
+  app.patch(labelsPaths.editDeleteLabel(':id'), userGuard(), async (req, res) => {
+    try {
+      const validLabel = app.models.label.fromJson(req.body.data);
+      await app.models.label.query().update(validLabel).where('id', req.params.id);
+      req.flash('success', i18next.t('labels.editSuccess'));
+      return res.redirect(labelsPaths.labels());
+    } catch (e) {
+      const label = new app.models.label();
+      label.$set(req.body.data);
+      res.code(400);
+      req.flash('warning', i18next.t('labels.editFail'));
+      if (e instanceof ValidationError) {
+        return res.render('editLabel.pug', { label, errors: labelErrors(e) });
       }
-    // eslint-disable-next-line
-    } else if (req.body._method === 'delete') {
-      try {
-        await app.models.label.query().deleteById(req.params.id);
-        req.flash('info', i18next.t('labels.deleteSuccess'));
-        return res.redirect(labelsPaths.labels());
-      } catch (e) {
-        console.warn(e);
-        if (e instanceof ForeignKeyViolationError) {
-          req.flash('warning', i18next.t('tasks.deleteLinkedResource'));
-          return res.redirect(labelsPaths.labels());
-        }
 
-        return res.callNotFound();
+      console.warn(e);
+      return res.render('editLabel.pug', { label });
+    }
+  });
+
+  app.delete(labelsPaths.editDeleteLabel(':id'), userGuard(), async (req, res) => {
+    try {
+      await app.models.label.query().deleteById(req.params.id);
+      req.flash('info', i18next.t('labels.deleteSuccess'));
+      return res.redirect(labelsPaths.labels());
+    } catch (e) {
+      console.warn(e);
+      if (e instanceof ForeignKeyViolationError) {
+        req.flash('warning', i18next.t('tasks.deleteLinkedResource'));
+        return res.redirect(labelsPaths.labels());
       }
-    } else {
+
       return res.callNotFound();
     }
   });

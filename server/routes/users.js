@@ -1,6 +1,7 @@
 import i18next from 'i18next';
 import { ValidationError } from 'objection';
 import { mainPaths } from './main.js';
+import { userGuard } from './guards.js';
 
 export const usersPaths = {
   users: () => '/users',
@@ -9,11 +10,7 @@ export const usersPaths = {
   editUser: (id) => `${usersPaths.editDeleteUser(id)}/edit`,
 };
 
-const userErrors = (e) => Object.keys(e.data).reduce((object, key) => {
-  // eslint-disable-next-line
-  object[key] = `${i18next.t('layout.errorIn')} ${i18next.t(`signUp.${key}`)}`;
-  return object;
-}, {});
+const userErrors = (e) => Object.keys(e.data).reduce((object, key) => ({ ...object, key: `${i18next.t('layout.errorIn')} ${i18next.t(`signUp.${key}`)}` }), {});
 
 export default (app) => {
   app.get(usersPaths.signUp(), (_, res) => {
@@ -48,29 +45,9 @@ export default (app) => {
     return res.render('users.pug', { users });
   });
 
-  app.get(usersPaths.editUser(':id'), async (req, res) => {
-    // eslint-disable-next-line
-    if (req.params.id != req.user?.id) {
-      req.flash('danger', i18next.t('layout.401'));
-      return res.redirect(usersPaths.users());
-    }
-    return res.render('editUser.pug', { user: { ...req.user, password: '' } });
-  });
+  app.get(usersPaths.editUser(':id'), userGuard(true), async (req, res) => res.render('editUser.pug', { user: { ...req.user, password: '' } }));
 
-  app.post(usersPaths.editDeleteUser(':id'), async (req, res) => {
-    // eslint-disable-next-line
-    if (req.params.id != req.user?.id) {
-      req.flash('danger', i18next.t('layout.401'));
-      return res.redirect(usersPaths.users());
-    }
-    // eslint-disable-next-line
-    if (req.body._method === 'delete') {
-      await app.models.user.query().deleteById(req.user.id);
-      await req.logOut();
-      req.flash('info', i18next.t('editUser.deleted'));
-      return res.redirect(usersPaths.users());
-    }
-
+  app.patch(usersPaths.editDeleteUser(':id'), userGuard(true), async (req, res) => {
     try {
       const validUser = app.models.user.fromJson(req.body.data);
       await app.models.user.query().update(validUser).where('id', req.user.id);
@@ -87,5 +64,12 @@ export default (app) => {
       req.flash('warning', i18next.t('layout.error'));
       return res.render('editUser.pug', { user: { ...req.user, ...user } });
     }
+  });
+
+  app.delete(usersPaths.editDeleteUser(':id'), userGuard(true), async (req, res) => {
+    await app.models.user.query().deleteById(req.user.id);
+    await req.logOut();
+    req.flash('info', i18next.t('editUser.deleted'));
+    return res.redirect(usersPaths.users());
   });
 };
