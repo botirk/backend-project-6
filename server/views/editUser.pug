@@ -4,6 +4,7 @@ block content
     h1= t('editUser.editUser')
 
     form(action= paths.editDeleteUser(user.id), method= 'post')
+        input(name= '_method', type= 'hidden', value= 'patch')
         .mb-3
             label.form-label(for= 'data_firstName')= t('signUp.firstName')
             input.form-control(id= 'data_firstName', class= (errors.firstName ? 'is-invalid' : ''), type= 'text', placeholder= t('signUp.firstName'), name= 'data[firstName]', value= user.firstName)
