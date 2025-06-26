@@ -10,7 +10,7 @@ export const usersPaths = {
   editUser: (id) => `${usersPaths.editDeleteUser(id)}/edit`,
 };
 
-const userErrors = (e) => Object.keys(e.data).reduce((object, key) => ({ ...object, key: `${i18next.t('layout.errorIn')} ${i18next.t(`signUp.${key}`)}` }), {});
+const userErrors = (e) => Object.keys(e.data).reduce((object, key) => ({ ...object, [key]: `${i18next.t('layout.errorIn')} ${i18next.t(`signUp.${key}`)}` }), {});
 
 export default (app) => {
   app.get(usersPaths.signUp(), (_, res) => {

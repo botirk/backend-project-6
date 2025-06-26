@@ -9,7 +9,7 @@ export const statusesPaths = {
   editStatus: (id) => `${statusesPaths.editDeleteStatus(id)}/edit`,
 };
 
-const statusErrors = (e) => Object.keys(e.data).reduce((object, key) => ({ ...object, key: `${i18next.t('layout.errorIn')} ${i18next.t(`statuses.${key}`)}` }), {});
+const statusErrors = (e) => Object.keys(e.data).reduce((object, key) => ({ ...object, [key]: `${i18next.t('layout.errorIn')} ${i18next.t(`statuses.${key}`)}` }), {});
 
 export default (app) => {
   app.get(statusesPaths.createStatus(), userGuard(), async (req, res) => res.render('createStatus.pug'));

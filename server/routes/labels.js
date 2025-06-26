@@ -9,7 +9,7 @@ export const labelsPaths = {
   editLabel: (id) => `${labelsPaths.labels()}/${id ?? ':id'}/edit`,
 };
 
-const labelErrors = (e) => Object.keys(e.data).reduce((object, key) => ({ ...object, key: `${i18next.t('layout.errorIn')} ${i18next.t(`labels.${key}`)}` }), {});
+const labelErrors = (e) => Object.keys(e.data).reduce((object, key) => ({ ...object, [key]: `${i18next.t('layout.errorIn')} ${i18next.t(`labels.${key}`)}` }), {});
 
 export default (app) => {
   app.get(labelsPaths.createLabel(), userGuard(), async (req, res) => res.render('createLabel.pug'));

@@ -9,7 +9,7 @@ export const tasksPaths = {
   showEditDeleteTask: (id) => `${tasksPaths.tasks()}/${id ?? ':id'}`,
 };
 
-const taskErrors = (e) => Object.keys(e.data).reduce((object, key) => ({ ...object, key: `${i18next.t('layout.errorIn')} ${i18next.t(`tasks.${key}`)}` }), {});
+const taskErrors = (e) => Object.keys(e.data).reduce((object, key) => ({ ...object, [key]: `${i18next.t('layout.errorIn')} ${i18next.t(`tasks.${key}`)}` }), {});
 
 const taskOptions = async (app, task = undefined, errors = undefined) => {
   const result = {
