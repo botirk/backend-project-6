@@ -1,5 +1,7 @@
 import { Model } from 'objection';
-import { encryptPassword } from '../auth.js';
+import { createHash } from 'node:crypto';
+
+export const encryptPassword = (password) => createHash('sha256').update(password).digest('hex');
 
 export default class User extends Model {
   static get tableName() {
@@ -27,5 +29,9 @@ export default class User extends Model {
 
   get password() {
     return super.password;
+  }
+
+  static findUser(email, rawPassword) {
+    return this.query().findOne({ email, password: encryptPassword(rawPassword) });
   }
 }

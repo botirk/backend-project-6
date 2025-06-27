@@ -1,8 +1,5 @@
-import { createHash } from 'node:crypto';
 import fastifyPassport, { Strategy } from '@fastify/passport';
 import fastifySecureSession from '@fastify/secure-session';
-
-export const encryptPassword = (password) => createHash('sha256').update(password).digest('hex');
 
 class FormStrategy extends Strategy {
   constructor(name, app) {
@@ -13,12 +10,11 @@ class FormStrategy extends Strategy {
   async authenticate(req) {
     if (req.isAuthenticated()) return this.pass();
     const email = req?.body?.data?.email;
-    let password = req?.body?.data?.password;
+    const password = req?.body?.data?.password;
     if (!email || !password) return this.fail();
-    password = encryptPassword(password);
-    const user = await this.app.models.user.query().findOne({ email, password });
-    if (user) return this.success(user);
-    return this.fail();
+    const user = await this.app.models.user.findUser(email, password);
+    if (!user) return this.fail();
+    return this.success(user);
   }
 }
 
