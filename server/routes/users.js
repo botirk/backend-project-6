@@ -2,6 +2,7 @@ import i18next from 'i18next';
 import { ValidationError } from 'objection';
 import { mainPaths } from './main.js';
 import { userGuard } from './guards.js';
+import { encryptPassword } from '../auth.js';
 
 export const usersPaths = {
   users: () => '/users',
@@ -20,6 +21,7 @@ export default (app) => {
   app.post(usersPaths.users(), async (req, res) => {
     try {
       const validUser = app.models.user.fromJson(req.body.data);
+      validUser.password = encryptPassword(validUser.password);
       await app.models.user.query().insert(validUser);
       req.flash('success', i18next.t('signUp.success'));
       return res.redirect(mainPaths.main());
@@ -50,6 +52,7 @@ export default (app) => {
   app.patch(usersPaths.editDeleteUser(':id'), userGuard(true), async (req, res) => {
     try {
       const validUser = app.models.user.fromJson(req.body.data);
+      validUser.password = encryptPassword(validUser.password);
       await app.models.user.query().update(validUser).where('id', req.user.id);
       req.flash('success', i18next.t('editUser.success'));
       return res.redirect(usersPaths.users());

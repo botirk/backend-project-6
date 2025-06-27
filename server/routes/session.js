@@ -7,9 +7,7 @@ const login = () => `${session()}/new`;
 export const sessionPaths = { session, login };
 
 export default (app) => {
-  app.get(sessionPaths.login(), (_, res) => {
-    res.render('login.pug');
-  });
+  app.get(sessionPaths.login(), (_, res) => res.render('login.pug'));
 
   app.delete(sessionPaths.session(), userGuard(), async (req, res) => {
     await req.logOut();
