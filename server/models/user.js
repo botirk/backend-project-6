@@ -1,4 +1,5 @@
 import { Model } from 'objection';
+import { encryptPassword } from '../auth.js';
 
 export default class User extends Model {
   static get tableName() {
@@ -18,5 +19,11 @@ export default class User extends Model {
         createDate: { type: 'string', format: 'date-time' },
       },
     };
+  }
+
+  static fromJsonWithPassword(json) {
+    const validUser = this.fromJson(json);
+    validUser.password = encryptPassword(validUser.password);
+    return validUser;
   }
 }
