@@ -1,7 +1,7 @@
 import { Model } from 'objection';
 import { createHash } from 'node:crypto';
 
-export const encryptPassword = (password) => createHash('sha256').update(password).digest('hex');
+const encryptPassword = (password) => createHash('sha256').update(password).digest('hex');
 
 export default class User extends Model {
   static get tableName() {
