@@ -21,9 +21,11 @@ export default class User extends Model {
     };
   }
 
-  static fromJsonWithPassword(json) {
-    const validUser = this.fromJson(json);
-    validUser.password = encryptPassword(validUser.password);
-    return validUser;
+  set password(password) {
+    super.password = encryptPassword(password);
+  }
+
+  get password() {
+    return super.password;
   }
 }

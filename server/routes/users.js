@@ -19,7 +19,7 @@ export default (app) => {
 
   app.post(usersPaths.users(), async (req, res) => {
     try {
-      const validUser = app.models.user.fromJsonWithPassword(req.body.data);
+      const validUser = app.models.user.fromJson(req.body.data);
       await app.models.user.query().insert(validUser);
       req.flash('success', i18next.t('signUp.success'));
       return res.redirect(mainPaths.main());
@@ -49,7 +49,7 @@ export default (app) => {
 
   app.patch(usersPaths.editDeleteUser(':id'), userGuard(true), async (req, res) => {
     try {
-      const validUser = app.models.user.fromJsonWithPassword(req.body.data);
+      const validUser = app.models.user.fromJson(req.body.data);
       await app.models.user.query().update(validUser).where('id', req.user.id);
       req.flash('success', i18next.t('editUser.success'));
       return res.redirect(usersPaths.users());
