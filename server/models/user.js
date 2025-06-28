@@ -23,12 +23,10 @@ export default class User extends Model {
     };
   }
 
-  set password(password) {
-    super.password = encryptPassword(password);
-  }
-
-  get password() {
-    return super.password;
+  static fromJson(json) {
+    const result = super.fromJson(json);
+    result.password = encryptPassword(result.password);
+    return result;
   }
 
   static findUser(email, rawPassword) {
