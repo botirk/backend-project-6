@@ -48,9 +48,17 @@ const registerPlugins = async (app) => {
     prefix: '/dist/',
   });
 
-  const knex = knexConstructor(knexConfig[mode]);
-  if (mode !== 'production') await knex.raw('PRAGMA foreign_keys = ON;');
-  await knex.migrate.latest();
+  let knex = knexConstructor(knexConfig[mode]);
+  try {
+    if (mode !== 'production') await knex.raw('PRAGMA foreign_keys = ON;');
+    await knex.migrate.latest();
+  } catch {
+    knex.destroy();
+    knex = knexConstructor(knexConfig.test);
+    await knex.raw('PRAGMA foreign_keys = ON;');
+    await knex.migrate.latest();
+  }
+
   // eslint-disable-next-line no-restricted-syntax -- iterating is okay
   for (const model of Object.values(models)) model.knex(knex);
   app.decorate('models', models);
